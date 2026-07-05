@@ -55,7 +55,7 @@ function extractCoverUrl(
 }
 
 function extractTitle(title: Record<string, string>): string {
-  return title.en || title["ja-ro"] || title.ja || Object.values(title)[0] || "Untitled";
+  return title.pl || title.en || title["ja-ro"] || title.ja || Object.values(title)[0] || "Untitled";
 }
 
 function extractDescription(description: Record<string, string>): string {
@@ -117,7 +117,7 @@ export async function fetchMangaList(
   limit: number = 20,
   offset: number = 0
 ): Promise<{ manga: MangaDexManga[]; total: number }> {
-  const url = `${MANGADEX_API}/manga?includes[]=cover_art&includes[]=author&limit=${limit}&offset=${offset}&order[followedCount]=desc&contentRating[]=safe&contentRating[]=suggestive&availableTranslatedLanguage[]=en`;
+  const url = `${MANGADEX_API}/manga?includes[]=cover_art&includes[]=author&limit=${limit}&offset=${offset}&order[followedCount]=desc&contentRating[]=safe&contentRating[]=suggestive&availableTranslatedLanguage[]=en&availableTranslatedLanguage[]=pl`;
 
   const res = await fetchWithRetry(url);
   const data: MangaDexResponse = await res.json();
@@ -148,7 +148,7 @@ export async function searchManga(
   limit: number = 20,
   offset: number = 0
 ): Promise<{ manga: MangaDexManga[]; total: number }> {
-  const url = `${MANGADEX_API}/manga?includes[]=cover_art&includes[]=author&limit=${limit}&offset=${offset}&title=${encodeURIComponent(query)}&contentRating[]=safe&contentRating[]=suggestive&availableTranslatedLanguage[]=en`;
+  const url = `${MANGADEX_API}/manga?includes[]=cover_art&includes[]=author&limit=${limit}&offset=${offset}&title=${encodeURIComponent(query)}&contentRating[]=safe&contentRating[]=suggestive&availableTranslatedLanguage[]=en&availableTranslatedLanguage[]=pl`;
 
   const res = await fetchWithRetry(url);
   const data: MangaDexResponse = await res.json();

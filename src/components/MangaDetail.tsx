@@ -99,14 +99,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
             )}
           </div>
 
-          <div className="mt-3">
-            <AddToListButton
-              manga={manga}
-              currentStatus={currentStatus}
-              currentRating={currentRating}
-            />
           </div>
-        </div>
 
         {/* Details */}
         <div className="flex-1 min-w-0">
@@ -134,20 +127,14 @@ export default function MangaDetail({ id }: MangaDetailProps) {
             </div>
           )}
 
-          {/* Status badges */}
-          <div className="mt-4 space-y-1.5">
-            {currentStatus && (
-              <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                <span className="text-[var(--text-tertiary)]">Status:</span>
-                <span className="font-medium">
-                  {currentStatus.replace(/_/g, " ")}
-                </span>
-              </div>
-            )}
-            {currentRating && (
-              <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                <span className="text-[var(--text-tertiary)]">Rating:</span>
-                <span className="font-medium">
+          {/* Status indicator for logged-in users */}
+          {session && currentStatus && (
+            <div className="mt-4 flex items-center gap-3 text-xs text-[var(--text-secondary)]">
+              <span className="text-[var(--text-tertiary)] uppercase tracking-wider">
+                {currentStatus.replace(/_/g, " ")}
+              </span>
+              {currentRating && (
+                <span>
                   {Array.from({ length: 5 }, (_, i) => (
                     <span
                       key={i}
@@ -161,9 +148,20 @@ export default function MangaDetail({ id }: MangaDetailProps) {
                     </span>
                   ))}
                 </span>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
+
+          {/* Add to list button between title and description */}
+          {session && (
+            <div className="mt-4 mb-6 border-t border-[var(--border-primary)] pt-4">
+              <AddToListButton
+                manga={manga}
+                currentStatus={currentStatus}
+                currentRating={currentRating}
+              />
+            </div>
+          )}
 
           {/* Description */}
           {manga.description && (

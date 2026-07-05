@@ -20,6 +20,13 @@ const STATUS_LABELS: Record<StatusOption, string> = {
   dropped: "Dropped",
 };
 
+const STATUS_ORDER: StatusOption[] = [
+  "plan_to_read",
+  "reading",
+  "completed",
+  "dropped",
+];
+
 export default function AddToListButton({
   manga,
   currentStatus,
@@ -27,62 +34,90 @@ export default function AddToListButton({
 }: AddToListButtonProps) {
   const { data: session } = useSession();
   const router = useRouter();
-  const [showMenu, setShowMenu] = useState(false);
   const [status, setStatus] = useState<string | null>(currentStatus ?? null);
   const [rating, setRating] = useState<number | null>(currentRating ?? null);
   const [loading, setLoading] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
-  const handleAddToList = useCallback(
-    async (newStatus: StatusOption) => {
-      if (!session) {
-        router.push("/login");
-        return;
+  const handleAdd = useCallback(async () => {
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/readlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mangaId: manga.id,
+          title: manga.title,
+          coverUrl: manga.coverUrl,
+          description: manga.description,
+          year: manga.year,
+          status: "plan_to_read",
+        }),
+      });
+
+      if (res.ok) {
+        setStatus("plan_to_read");
+        router.refresh();
       }
+    } finally {
+      setLoading(false);
+    }
+  }, [session, manga, router]);
 
+  const handleCycleStatus = useCallback(async () => {
+    if (!status) return;
+    const currentIndex = STATUS_ORDER.indexOf(status as StatusOption);
+    const nextStatus = STATUS_ORDER[(currentIndex + 1) % STATUS_ORDER.length];
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/readlist", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mangaId: manga.id,
+          status: nextStatus,
+        }),
+      });
+
+      if (res.ok) {
+        setStatus(nextStatus);
+        router.refresh();
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [status, manga.id, router]);
+
+  const handleStatusChange = useCallback(
+    async (newStatus: StatusOption) => {
       setLoading(true);
       try {
         const res = await fetch("/api/readlist", {
-          method: "POST",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             mangaId: manga.id,
-            title: manga.title,
-            coverUrl: manga.coverUrl,
-            description: manga.description,
-            year: manga.year,
             status: newStatus,
           }),
         });
 
         if (res.ok) {
           setStatus(newStatus);
-          setShowMenu(false);
+          setShowOptions(false);
           router.refresh();
         }
       } finally {
         setLoading(false);
       }
     },
-    [session, manga, router]
+    [manga.id, router]
   );
-
-  const handleRemove = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/readlist?mangaId=${manga.id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        setStatus(null);
-        setRating(null);
-        setShowMenu(false);
-        router.refresh();
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [manga.id, router]);
 
   const handleRate = useCallback(
     async (newRating: number) => {
@@ -109,79 +144,101 @@ export default function AddToListButton({
     [manga.id, status, router]
   );
 
+  const handleRemove = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/readlist?mangaId=${manga.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        setStatus(null);
+        setRating(null);
+        setShowOptions(false);
+        router.refresh();
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [manga.id, router]);
+
+  if (!session) return null;
+
   return (
-    <div className="relative">
-      <button
-        onClick={() => {
-          if (!session) {
-            router.push("/login");
-            return;
-          }
-          setShowMenu(!showMenu);
-        }}
-        disabled={loading}
-        className="w-full h-9 text-xs font-medium uppercase tracking-wider bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50"
-      >
-        {status ? STATUS_LABELS[status as StatusOption] || "In List" : "Add to List"}
-      </button>
-
-      {showMenu && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setShowMenu(false)}
-          />
-          <div className="absolute left-0 top-full mt-1 z-20 w-44 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-sm">
-            {(Object.entries(STATUS_LABELS) as [StatusOption, string][]).map(
-              ([key, label]) => (
-                <button
-                  key={key}
-                  onClick={() => handleAddToList(key)}
-                  className={`block w-full text-left px-4 py-2 text-xs transition-colors ${
-                    status === key
-                      ? "text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  }`}
-                >
-                  {label}
-                </button>
-              )
-            )}
-
-            {status && (
-              <>
-                <div className="border-t border-gray-100 dark:border-gray-800" />
-                <div className="px-4 py-2">
-                  <p className="text-[10px] text-gray-400 mb-1 uppercase tracking-wider">
-                    Rating
-                  </p>
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        onClick={() => handleRate(star)}
-                        className={`text-sm transition-colors ${
-                          rating && star <= rating
-                            ? "text-gray-900 dark:text-gray-100"
-                            : "text-gray-200 dark:text-gray-800"
-                        }`}
-                      >
-                        ★
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="border-t border-gray-100 dark:border-gray-800" />
-                <button
-                  onClick={handleRemove}
-                  className="block w-full text-left px-4 py-2 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                >
-                  Remove from list
-                </button>
-              </>
-            )}
+    <div>
+      {!status ? (
+        <button
+          onClick={handleAdd}
+          disabled={loading}
+          className="h-8 px-4 text-xs font-medium uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-80 transition-opacity disabled:opacity-50 rounded-sm"
+        >
+          {loading ? "..." : "Add to List"}
+        </button>
+      ) : (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowOptions(!showOptions)}
+              disabled={loading}
+              className="h-8 px-4 text-xs font-medium uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] hover:opacity-80 transition-opacity disabled:opacity-50 rounded-sm"
+            >
+              {STATUS_LABELS[status as StatusOption] || "In List"}
+            </button>
           </div>
-        </>
+
+          {showOptions && (
+            <div className="space-y-2 pt-1">
+              <div className="flex flex-wrap gap-1">
+                {(Object.entries(STATUS_LABELS) as [StatusOption, string][]).map(
+                  ([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => handleStatusChange(key)}
+                      disabled={loading}
+                      className={`px-3 py-1 text-[10px] uppercase tracking-wider rounded-sm transition-colors ${
+                        status === key
+                          ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                          : "bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-primary)] hover:border-[var(--text-tertiary)]"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  )
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)]">
+                  Rating:
+                </span>
+                <div className="flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => handleRate(star)}
+                      disabled={loading}
+                      className={`text-sm transition-colors ${
+                        rating && star <= rating
+                          ? "text-[var(--text-primary)]"
+                          : "text-[var(--border-primary)]"
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleRemove}
+                disabled={loading}
+                className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
