@@ -12,7 +12,7 @@ export default function MangaGrid({ manga, readlistStatuses }: MangaGridProps) {
   if (manga.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="text-sm text-gray-400 dark:text-gray-600">
+        <p className="text-sm text-[var(--text-tertiary)]">
           No manga found.
         </p>
       </div>

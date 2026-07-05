@@ -1,8 +1,81 @@
 @import "tailwindcss";
 
+/* Gyst font faces */
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-LightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-MediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gyst";
+  src: url("/fonts/Gyst-BoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Gyst", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 /* Light mode (default) */
@@ -32,6 +105,11 @@
   --accent: #ededed;
 }
 
+/* Theme transition — smooth crossfade when theme changes */
+html.theme-changing * {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.25s ease, transform 0.3s ease, fill 0.4s ease, stroke 0.4s ease, box-shadow 0.4s ease !important;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -44,6 +122,7 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.06em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

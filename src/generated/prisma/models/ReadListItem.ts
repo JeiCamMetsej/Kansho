@@ -40,6 +40,7 @@ export type ReadListItemMinAggregateOutputType = {
   mangaId: string | null
   status: string | null
   rating: number | null
+  review: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +51,7 @@ export type ReadListItemMaxAggregateOutputType = {
   mangaId: string | null
   status: string | null
   rating: number | null
+  review: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +62,7 @@ export type ReadListItemCountAggregateOutputType = {
   mangaId: number
   status: number
   rating: number
+  review: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,6 +83,7 @@ export type ReadListItemMinAggregateInputType = {
   mangaId?: true
   status?: true
   rating?: true
+  review?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -90,6 +94,7 @@ export type ReadListItemMaxAggregateInputType = {
   mangaId?: true
   status?: true
   rating?: true
+  review?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +105,7 @@ export type ReadListItemCountAggregateInputType = {
   mangaId?: true
   status?: true
   rating?: true
+  review?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -197,6 +203,7 @@ export type ReadListItemGroupByOutputType = {
   mangaId: string
   status: string
   rating: number | null
+  review: string | null
   createdAt: Date
   updatedAt: Date
   _count: ReadListItemCountAggregateOutputType | null
@@ -229,7 +236,8 @@ export type ReadListItemWhereInput = {
   userId?: Prisma.StringFilter<"ReadListItem"> | string
   mangaId?: Prisma.StringFilter<"ReadListItem"> | string
   status?: Prisma.StringFilter<"ReadListItem"> | string
-  rating?: Prisma.IntNullableFilter<"ReadListItem"> | number | null
+  rating?: Prisma.FloatNullableFilter<"ReadListItem"> | number | null
+  review?: Prisma.StringNullableFilter<"ReadListItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -242,6 +250,7 @@ export type ReadListItemOrderByWithRelationInput = {
   mangaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  review?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -257,7 +266,8 @@ export type ReadListItemWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"ReadListItem"> | string
   mangaId?: Prisma.StringFilter<"ReadListItem"> | string
   status?: Prisma.StringFilter<"ReadListItem"> | string
-  rating?: Prisma.IntNullableFilter<"ReadListItem"> | number | null
+  rating?: Prisma.FloatNullableFilter<"ReadListItem"> | number | null
+  review?: Prisma.StringNullableFilter<"ReadListItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -270,6 +280,7 @@ export type ReadListItemOrderByWithAggregationInput = {
   mangaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  review?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ReadListItemCountOrderByAggregateInput
@@ -287,7 +298,8 @@ export type ReadListItemScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"ReadListItem"> | string
   mangaId?: Prisma.StringWithAggregatesFilter<"ReadListItem"> | string
   status?: Prisma.StringWithAggregatesFilter<"ReadListItem"> | string
-  rating?: Prisma.IntNullableWithAggregatesFilter<"ReadListItem"> | number | null
+  rating?: Prisma.FloatNullableWithAggregatesFilter<"ReadListItem"> | number | null
+  review?: Prisma.StringNullableWithAggregatesFilter<"ReadListItem"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ReadListItem"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ReadListItem"> | Date | string
 }
@@ -296,6 +308,7 @@ export type ReadListItemCreateInput = {
   id?: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReadListInput
@@ -308,6 +321,7 @@ export type ReadListItemUncheckedCreateInput = {
   mangaId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -315,7 +329,8 @@ export type ReadListItemUncheckedCreateInput = {
 export type ReadListItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReadListNestedInput
@@ -327,7 +342,8 @@ export type ReadListItemUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   mangaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -338,6 +354,7 @@ export type ReadListItemCreateManyInput = {
   mangaId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -345,7 +362,8 @@ export type ReadListItemCreateManyInput = {
 export type ReadListItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,7 +373,8 @@ export type ReadListItemUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   mangaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,6 +400,7 @@ export type ReadListItemCountOrderByAggregateInput = {
   mangaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  review?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -395,6 +415,7 @@ export type ReadListItemMaxOrderByAggregateInput = {
   mangaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  review?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -405,6 +426,7 @@ export type ReadListItemMinOrderByAggregateInput = {
   mangaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  review?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -497,10 +519,23 @@ export type ReadListItemUncheckedUpdateManyWithoutMangaNestedInput = {
   deleteMany?: Prisma.ReadListItemScalarWhereInput | Prisma.ReadListItemScalarWhereInput[]
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type ReadListItemCreateWithoutUserInput = {
   id?: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   manga: Prisma.MangaCreateNestedOneWithoutReadListItemsInput
@@ -511,6 +546,7 @@ export type ReadListItemUncheckedCreateWithoutUserInput = {
   mangaId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -522,6 +558,7 @@ export type ReadListItemCreateOrConnectWithoutUserInput = {
 
 export type ReadListItemCreateManyUserInputEnvelope = {
   data: Prisma.ReadListItemCreateManyUserInput | Prisma.ReadListItemCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type ReadListItemUpsertWithWhereUniqueWithoutUserInput = {
@@ -548,7 +585,8 @@ export type ReadListItemScalarWhereInput = {
   userId?: Prisma.StringFilter<"ReadListItem"> | string
   mangaId?: Prisma.StringFilter<"ReadListItem"> | string
   status?: Prisma.StringFilter<"ReadListItem"> | string
-  rating?: Prisma.IntNullableFilter<"ReadListItem"> | number | null
+  rating?: Prisma.FloatNullableFilter<"ReadListItem"> | number | null
+  review?: Prisma.StringNullableFilter<"ReadListItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ReadListItem"> | Date | string
 }
@@ -557,6 +595,7 @@ export type ReadListItemCreateWithoutMangaInput = {
   id?: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReadListInput
@@ -567,6 +606,7 @@ export type ReadListItemUncheckedCreateWithoutMangaInput = {
   userId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -578,6 +618,7 @@ export type ReadListItemCreateOrConnectWithoutMangaInput = {
 
 export type ReadListItemCreateManyMangaInputEnvelope = {
   data: Prisma.ReadListItemCreateManyMangaInput | Prisma.ReadListItemCreateManyMangaInput[]
+  skipDuplicates?: boolean
 }
 
 export type ReadListItemUpsertWithWhereUniqueWithoutMangaInput = {
@@ -601,6 +642,7 @@ export type ReadListItemCreateManyUserInput = {
   mangaId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -608,7 +650,8 @@ export type ReadListItemCreateManyUserInput = {
 export type ReadListItemUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   manga?: Prisma.MangaUpdateOneRequiredWithoutReadListItemsNestedInput
@@ -618,7 +661,8 @@ export type ReadListItemUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   mangaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -627,7 +671,8 @@ export type ReadListItemUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   mangaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -637,6 +682,7 @@ export type ReadListItemCreateManyMangaInput = {
   userId: string
   status?: string
   rating?: number | null
+  review?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -644,7 +690,8 @@ export type ReadListItemCreateManyMangaInput = {
 export type ReadListItemUpdateWithoutMangaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReadListNestedInput
@@ -654,7 +701,8 @@ export type ReadListItemUncheckedUpdateWithoutMangaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -663,7 +711,8 @@ export type ReadListItemUncheckedUpdateManyWithoutMangaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  review?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -676,6 +725,7 @@ export type ReadListItemSelect<ExtArgs extends runtime.Types.Extensions.Internal
   mangaId?: boolean
   status?: boolean
   rating?: boolean
+  review?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -688,6 +738,7 @@ export type ReadListItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   mangaId?: boolean
   status?: boolean
   rating?: boolean
+  review?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -700,6 +751,7 @@ export type ReadListItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   mangaId?: boolean
   status?: boolean
   rating?: boolean
+  review?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -712,11 +764,12 @@ export type ReadListItemSelectScalar = {
   mangaId?: boolean
   status?: boolean
   rating?: boolean
+  review?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ReadListItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "mangaId" | "status" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["readListItem"]>
+export type ReadListItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "mangaId" | "status" | "rating" | "review" | "createdAt" | "updatedAt", ExtArgs["result"]["readListItem"]>
 export type ReadListItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   manga?: boolean | Prisma.MangaDefaultArgs<ExtArgs>
@@ -742,6 +795,7 @@ export type $ReadListItemPayload<ExtArgs extends runtime.Types.Extensions.Intern
     mangaId: string
     status: string
     rating: number | null
+    review: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["readListItem"]>
@@ -1173,7 +1227,8 @@ export interface ReadListItemFieldRefs {
   readonly userId: Prisma.FieldRef<"ReadListItem", 'String'>
   readonly mangaId: Prisma.FieldRef<"ReadListItem", 'String'>
   readonly status: Prisma.FieldRef<"ReadListItem", 'String'>
-  readonly rating: Prisma.FieldRef<"ReadListItem", 'Int'>
+  readonly rating: Prisma.FieldRef<"ReadListItem", 'Float'>
+  readonly review: Prisma.FieldRef<"ReadListItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"ReadListItem", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ReadListItem", 'DateTime'>
 }
@@ -1410,6 +1465,7 @@ export type ReadListItemCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many ReadListItems.
    */
   data: Prisma.ReadListItemCreateManyInput | Prisma.ReadListItemCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1428,6 +1484,7 @@ export type ReadListItemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many ReadListItems.
    */
   data: Prisma.ReadListItemCreateManyInput | Prisma.ReadListItemCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

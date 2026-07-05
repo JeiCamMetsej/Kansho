@@ -4,12 +4,14 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import StarRating from "@/components/StarRating";
 
 interface ReadListItem {
   id: string;
   mangaId: string;
   status: string;
   rating: number | null;
+  review: string | null;
   manga: {
     id: string;
     title: string;
@@ -45,10 +47,10 @@ export default function ReadlistPage() {
     return (
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-100 dark:bg-gray-900 rounded w-1/4" />
+          <div className="h-6 bg-[var(--bg-tertiary)] rounded w-1/4" />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm" />
+              <div key={i} className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm" />
             ))}
           </div>
         </div>
@@ -58,10 +60,9 @@ export default function ReadlistPage() {
 
   const tabs = [
     { id: "all", label: "All" },
+    { id: "plan_to_read", label: "To Read" },
     { id: "reading", label: "Reading" },
-    { id: "plan_to_read", label: "Plan to Read" },
     { id: "completed", label: "Completed" },
-    { id: "dropped", label: "Dropped" },
   ];
 
   const filtered =
@@ -82,15 +83,15 @@ export default function ReadlistPage() {
 
       {/* Tabs */}
       <div className="border-b border-[var(--border-primary)] mb-6">
-        <div className="flex gap-6">
+        <div className="grid grid-cols-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-2 text-xs uppercase tracking-wider transition-colors ${
+              className={`pb-1.5 text-[11px] text-center uppercase tracking-wider transition-all duration-150 active:brightness-75 ${
                 activeTab === tab.id
-                  ? "text-[var(--text-primary)] border-b border-[var(--text-primary)]"
-                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                  ? "text-[var(--text-primary)] border-b-2 border-[var(--text-primary)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] border-b-2 border-transparent"
               }`}
             >
               {tab.label}
@@ -122,7 +123,7 @@ export default function ReadlistPage() {
               className="group block"
             >
               <article className="space-y-2">
-                <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm overflow-hidden">
+                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
                   {item.manga.coverUrl ? (
                     <img
                       src={item.manga.coverUrl}
@@ -132,26 +133,22 @@ export default function ReadlistPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl font-light text-gray-300 dark:text-gray-700">
+                      <span className="text-2xl font-light text-[var(--text-tertiary)]">
                         ?
                       </span>
                     </div>
                   )}
                 </div>
                 <div className="space-y-0.5">
-                  <h3 className="text-xs font-medium text-[var(--text-primary)] leading-tight line-clamp-2">
+                  <h3 className="text-xs font-light text-[var(--text-primary)] leading-tight line-clamp-2">
                     {item.manga.title}
                   </h3>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-0.5">
                     <span className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)]">
                       {item.status.replace(/_/g, " ")}
                     </span>
                     {item.rating && (
-                      <span className="text-[10px] text-[var(--text-secondary)]">
-                        {Array.from({ length: item.rating }, (_, i) => (
-                          <span key={i}>★</span>
-                        ))}
-                      </span>
+                      <StarRating rating={item.rating} size="sm" />
                     )}
                   </div>
                 </div>

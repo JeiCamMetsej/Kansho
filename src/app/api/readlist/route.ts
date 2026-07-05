@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { mangaId, title, coverUrl, description, year, status } =
+    const { mangaId, title, coverUrl, description, year, status, rating, review } =
       await req.json();
 
     if (!mangaId || !title) {
@@ -79,6 +79,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (rating !== undefined) {
+      if (rating !== null && (typeof rating !== 'number' || rating < 0.5 || rating > 5 || (rating * 2) % 1 !== 0)) {
+        return NextResponse.json(
+          { error: "Rating must be between 0.5 and 5 in increments of 0.5, or null to clear" },
+          { status: 400 }
+        );
+      }
+    }
+
     await prisma.manga.upsert({
       where: { id: mangaId },
       update: { title, coverUrl, description, year },
@@ -89,11 +98,17 @@ export async function POST(req: NextRequest) {
       where: {
         userId_mangaId: { userId, mangaId },
       },
-      update: { status: finalStatus },
+      update: {
+        status: finalStatus,
+        ...(rating !== undefined && { rating }),
+        ...(review !== undefined && { review }),
+      },
       create: {
         userId,
         mangaId,
         status: finalStatus,
+        ...(rating !== undefined && { rating }),
+        ...(review !== undefined && { review }),
       },
       include: { manga: true },
     });
@@ -115,7 +130,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { mangaId, status, rating } = await req.json();
+    const { mangaId, status, rating, review } = await req.json();
 
     if (!mangaId) {
       return NextResponse.json(
@@ -144,11 +159,13 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    if (rating !== undefined && (rating < 1 || rating > 5)) {
-      return NextResponse.json(
-        { error: "Rating must be between 1 and 5" },
-        { status: 400 }
-      );
+    if (rating !== undefined) {
+      if (rating !== null && (typeof rating !== 'number' || rating < 0.5 || rating > 5 || (rating * 2) % 1 !== 0)) {
+        return NextResponse.json(
+          { error: "Rating must be between 0.5 and 5 in increments of 0.5, or null to clear" },
+          { status: 400 }
+        );
+      }
     }
 
     const item = await prisma.readListItem.update({
@@ -158,6 +175,7 @@ export async function PATCH(req: NextRequest) {
       data: {
         ...(status && { status }),
         ...(rating !== undefined && { rating }),
+        ...(review !== undefined && { review }),
       },
       include: { manga: true },
     });

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import type { MangaDexManga } from "@/lib/mangadex";
 import AddToListButton from "./AddToListButton";
+import StarRating from "./StarRating";
 
 interface MangaDetailProps {
   id: string;
@@ -16,6 +17,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
   const [error, setError] = useState<string | null>(null);
   const [currentStatus, setCurrentStatus] = useState<string | null>(null);
   const [currentRating, setCurrentRating] = useState<number | null>(null);
+  const [currentReview, setCurrentReview] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
@@ -39,10 +41,11 @@ export default function MangaDetail({ id }: MangaDetailProps) {
     if (session) {
       fetch(`/api/readlist?mangaId=${id}`)
         .then((res) => (res.ok ? res.json() : null))
-        .then((item: { status: string; rating: number | null } | null) => {
+        .then((item: { status: string; rating: number | null; review: string | null } | null) => {
           if (item) {
             setCurrentStatus(item.status);
             setCurrentRating(item.rating);
+            setCurrentReview(item.review);
           }
         })
         .catch(() => {});
@@ -54,12 +57,12 @@ export default function MangaDetail({ id }: MangaDetailProps) {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
         <div className="animate-pulse space-y-4">
           <div className="flex gap-6">
-            <div className="w-48 aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm shrink-0" />
+            <div className="w-48 aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm shrink-0" />
             <div className="flex-1 space-y-3">
-              <div className="h-6 bg-gray-100 dark:bg-gray-900 rounded w-2/3" />
-              <div className="h-4 bg-gray-100 dark:bg-gray-900 rounded w-1/3" />
-              <div className="h-3 bg-gray-100 dark:bg-gray-900 rounded w-full" />
-              <div className="h-3 bg-gray-100 dark:bg-gray-900 rounded w-3/4" />
+              <div className="h-6 bg-[var(--bg-tertiary)] rounded w-2/3" />
+              <div className="h-4 bg-[var(--bg-tertiary)] rounded w-1/3" />
+              <div className="h-3 bg-[var(--bg-tertiary)] rounded w-full" />
+              <div className="h-3 bg-[var(--bg-tertiary)] rounded w-3/4" />
             </div>
           </div>
         </div>
@@ -82,7 +85,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
       <div className="flex flex-col sm:flex-row gap-6">
         {/* Cover */}
         <div className="w-40 sm:w-48 shrink-0">
-          <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm overflow-hidden">
+          <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
             {manga.coverUrl && !imgError ? (
               <img
                 src={manga.coverUrl}
@@ -92,7 +95,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-3xl font-light text-gray-300 dark:text-gray-700">
+                <span className="text-3xl font-light text-[var(--text-tertiary)]">
                   ?
                 </span>
               </div>
@@ -119,7 +122,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
               {manga.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-gray-100 dark:bg-gray-900 text-[var(--text-tertiary)] rounded-sm"
+                  className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] rounded-sm"
                 >
                   {tag}
                 </span>
@@ -129,25 +132,19 @@ export default function MangaDetail({ id }: MangaDetailProps) {
 
           {/* Status indicator for logged-in users */}
           {session && currentStatus && (
-            <div className="mt-4 flex items-center gap-3 text-xs text-[var(--text-secondary)]">
-              <span className="text-[var(--text-tertiary)] uppercase tracking-wider">
-                {currentStatus.replace(/_/g, " ")}
-              </span>
-              {currentRating && (
-                <span>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <span
-                      key={i}
-                      className={
-                        i < currentRating
-                          ? "text-[var(--text-primary)]"
-                          : "text-[var(--border-primary)]"
-                      }
-                    >
-                      ★
-                    </span>
-                  ))}
+            <div className="mt-4 space-y-1">
+              <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
+                <span className="text-[var(--text-tertiary)] uppercase tracking-wider">
+                  {currentStatus.replace(/_/g, " ")}
                 </span>
+                {currentRating && (
+                  <StarRating rating={currentRating} size="sm" />
+                )}
+              </div>
+              {currentReview && (
+                <p className="text-[11px] text-[var(--text-tertiary)] italic leading-relaxed">
+                  &ldquo;{currentReview}&rdquo;
+                </p>
               )}
             </div>
           )}
@@ -159,6 +156,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
                 manga={manga}
                 currentStatus={currentStatus}
                 currentRating={currentRating}
+                currentReview={currentReview}
               />
             </div>
           )}
@@ -166,7 +164,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
           {/* Description */}
           {manga.description && (
             <div className="mt-6">
-              <h2 className="text-xs font-medium uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+              <h2 className="text-xs font-light uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
                 Description
               </h2>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">

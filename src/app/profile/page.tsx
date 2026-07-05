@@ -1,9 +1,16 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import StarRating from "@/components/StarRating";
+import FollowButton from "@/components/FollowButton";
+
+interface FollowUser {
+  id: string;
+  username: string;
+}
 
 interface ProfileData {
   id: string;
@@ -19,6 +26,7 @@ interface ProfileData {
     mangaId: string;
     status: string;
     rating: number | null;
+    review: string | null;
     manga: {
       id: string;
       title: string;
@@ -33,6 +41,10 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [followers, setFollowers] = useState<FollowUser[]>([]);
+  const [following, setFollowing] = useState<FollowUser[]>([]);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -42,13 +54,18 @@ export default function ProfilePage() {
 
     if (status === "authenticated" && session?.user) {
       const userId = (session.user as { id: string }).id;
-      fetch(`/api/users/${userId}`)
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          setProfile(data);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
+
+      Promise.all([
+        fetch(`/api/users/${userId}`).then((r) => (r.ok ? r.json() : null)),
+        fetch("/api/follow").then((r) => (r.ok ? r.json() : null)),
+      ]).then(([profileData, followData]) => {
+        setProfile(profileData);
+        if (followData) {
+          setFollowing(followData.following || []);
+          setFollowers(followData.followers || []);
+        }
+        setLoading(false);
+      }).catch(() => setLoading(false));
     }
   }, [session, status, router]);
 
@@ -56,11 +73,11 @@ export default function ProfilePage() {
     return (
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-100 dark:bg-gray-900 rounded w-1/3" />
-          <div className="h-4 bg-gray-100 dark:bg-gray-900 rounded w-1/4" />
+          <div className="h-6 bg-[var(--bg-tertiary)] rounded w-1/3" />
+          <div className="h-4 bg-[var(--bg-tertiary)] rounded w-1/4" />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm" />
+              <div key={i} className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm" />
             ))}
           </div>
         </div>
@@ -78,10 +95,9 @@ export default function ProfilePage() {
 
   const tabs = [
     { id: "all", label: "All" },
+    { id: "plan_to_read", label: "To Read" },
     { id: "reading", label: "Reading" },
-    { id: "plan_to_read", label: "Plan to Read" },
     { id: "completed", label: "Completed" },
-    { id: "dropped", label: "Dropped" },
   ];
 
   const filtered =
@@ -93,12 +109,25 @@ export default function ProfilePage() {
     <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
       {/* Profile Header */}
       <div className="mb-8">
-        <h1 className="text-xl font-light tracking-tight text-[var(--text-primary)]">
-          {profile.username}
-        </h1>
-        <p className="mt-1 text-xs text-[var(--text-tertiary)]">
-          Joined {new Date(profile.createdAt).toLocaleDateString()}
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-light tracking-tight text-[var(--text-primary)]">
+              {profile.username}
+            </h1>
+            <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+              Joined {new Date(profile.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            {session && (
+              <FollowButton
+                userId={profile.id}
+                initialFollowing={following.some((f) => f.id === profile.id)}
+              />
+            )}
+          </div>
+        </div>
+
         <div className="flex gap-4 mt-3">
           <span className="text-xs text-[var(--text-secondary)]">
             <strong className="text-[var(--text-primary)] font-medium">
@@ -106,32 +135,99 @@ export default function ProfilePage() {
             </strong>{" "}
             titles
           </span>
-          <span className="text-xs text-[var(--text-secondary)]">
+          <button
+            onClick={() => setShowFollowing(!showFollowing)}
+            className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+          >
             <strong className="text-[var(--text-primary)] font-medium">
-              {profile._count.following}
+              {following.length}
             </strong>{" "}
             following
-          </span>
-          <span className="text-xs text-[var(--text-secondary)]">
+          </button>
+          <button
+            onClick={() => setShowFollowers(!showFollowers)}
+            className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+          >
             <strong className="text-[var(--text-primary)] font-medium">
-              {profile._count.followers}
+              {followers.length}
             </strong>{" "}
             followers
-          </span>
+          </button>
         </div>
+
+        <a
+          href="https://ko-fi.com/jeicammetsej"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 h-10 px-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider rounded-sm bg-[var(--text-primary)] text-[var(--bg-primary)] hover:brightness-110 transition-all duration-150 active:brightness-75"
+          aria-label="Support Kanshō on Ko-fi"
+        >
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.881 8.948c-.773-1.072-2.893-1.522-4.25-1.682l-4.232-.488V5.5c0-1.307-.704-2.636-2.366-2.636H2.366C.704 2.864 0 4.192 0 5.5v13.636c0 1.307.704 2.636 2.366 2.636h10.667c1.662 0 2.366-1.329 2.366-2.636v-.297l4.268-.521c1.357-.165 3.466-.616 4.239-1.688.886-1.228.774-3.05.774-4.998 0-1.948-.106-3.77-.799-4.984zM7.255 3.705h5.513c.221 0 .443.221.443.442v.663H6.812v-.663c0-.221.222-.442.443-.442zm5.513 14.672a.738.738 0 01-.221.553c-.111.111-.221.111-.332.111H7.255a.369.369 0 01-.332-.111.738.738 0 01-.221-.553v-1.105h5.734v1.105h.332zm4.805-1.326c-1.326.166-2.311.221-3.031.221v-1.989c.829 0 1.768-.044 3.031-.166.941-.111 1.768-.332 1.768-1.105 0-.442-.332-.774-.774-.885-.166-.055-.388-.111-.664-.111v-1.989c.277 0 .498.055.664.111.442.111.774.443.774.885 0 .773-.828.994-1.768 1.105-1.263.111-2.202.166-3.031.166v-1.989c.72 0 1.705-.055 3.031-.221 1.105-.111 2.095-.443 2.652-1.105.442-.554.553-1.326.553-2.539v-1.546l4.897.553c.72.111 1.989.332 2.53.885.387.443.498 1.105.498 1.989v.111c0 1.657-.111 3.422-.387 4.53-.31 1.326-1.437 1.657-2.53 1.768l-5.513.553z" />
+          </svg>
+          <span>Support Kanshō</span>
+        </a>
+
+        {/* Following list */}
+        {showFollowing && (
+          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm">
+            <h3 className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+              Following
+            </h3>
+            {following.length === 0 ? (
+              <p className="text-[11px] text-[var(--text-tertiary)]">Not following anyone yet.</p>
+            ) : (
+              <div className="space-y-1">
+                {following.map((user) => (
+                  <Link
+                    key={user.id}
+                    href={`/profile/${user.id}`}
+                    className="block text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150"
+                  >
+                    {user.username}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Followers list */}
+        {showFollowers && (
+          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm">
+            <h3 className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+              Followers
+            </h3>
+            {followers.length === 0 ? (
+              <p className="text-[11px] text-[var(--text-tertiary)]">No followers yet.</p>
+            ) : (
+              <div className="space-y-1">
+                {followers.map((user) => (
+                  <Link
+                    key={user.id}
+                    href={`/profile/${user.id}`}
+                    className="block text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150"
+                  >
+                    {user.username}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Tabs */}
       <div className="border-b border-[var(--border-primary)] mb-6">
-        <div className="flex gap-6">
+        <div className="grid grid-cols-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-2 text-xs uppercase tracking-wider transition-colors ${
+              className={`pb-1.5 text-[11px] text-center uppercase tracking-wider transition-all duration-150 active:brightness-75 ${
                 activeTab === tab.id
-                  ? "text-[var(--text-primary)] border-b border-[var(--text-primary)]"
-                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                  ? "text-[var(--text-primary)] border-b-2 border-[var(--text-primary)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] border-b-2 border-transparent"
               }`}
             >
               {tab.label}
@@ -164,7 +260,7 @@ export default function ProfilePage() {
               className="group block"
             >
               <article className="space-y-2">
-                <div className="aspect-[3/4] bg-gray-100 dark:bg-gray-900 rounded-sm overflow-hidden">
+                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
                   {item.manga.coverUrl ? (
                     <img
                       src={item.manga.coverUrl}
@@ -174,26 +270,22 @@ export default function ProfilePage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl font-light text-gray-300 dark:text-gray-700">
+                      <span className="text-2xl font-light text-[var(--text-tertiary)]">
                         ?
                       </span>
                     </div>
                   )}
                 </div>
                 <div className="space-y-0.5">
-                  <h3 className="text-xs font-medium text-[var(--text-primary)] leading-tight line-clamp-2">
+                  <h3 className="text-xs font-light text-[var(--text-primary)] leading-tight line-clamp-2">
                     {item.manga.title}
                   </h3>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-0.5">
                     <span className="text-[10px] uppercase tracking-wider text-[var(--text-tertiary)]">
                       {item.status.replace(/_/g, " ")}
                     </span>
                     {item.rating && (
-                      <span className="text-[10px] text-[var(--text-secondary)]">
-                        {Array.from({ length: item.rating }, (_, i) => (
-                          <span key={i}>★</span>
-                        ))}
-                      </span>
+                      <StarRating rating={item.rating} size="sm" />
                     )}
                   </div>
                 </div>

@@ -5,6 +5,8 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
+  useRef,
   type ReactNode,
 } from "react";
 
@@ -19,32 +21,31 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
-    setMounted(true);
     const stored = localStorage.getItem("theme") as Theme | null;
-    if (stored) {
+    if (stored === "light" || stored === "dark") {
       setTheme(stored);
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setTheme(prefersDark ? "dark" : "light");
     }
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
     const root = document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
     localStorage.setItem("theme", theme);
-  }, [theme, mounted]);
+  }, [theme]);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    const root = document.documentElement;
+    root.classList.add("theme-changing");
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
+    timeoutRef.current = setTimeout(() => {
+      root.classList.remove("theme-changing");
+    }, 450);
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

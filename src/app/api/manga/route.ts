@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchMangaList, searchManga } from "@/lib/mangadex";
+import { fetchMangaList, searchManga, fetchTags } from "@/lib/mangadex";
 
 export async function GET(req: NextRequest) {
   try {
@@ -7,9 +7,12 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("q");
     const limit = Math.min(Number(searchParams.get("limit")) || 20, 50);
     const offset = Number(searchParams.get("offset")) || 0;
+    const lang = searchParams.get("lang") || "en";
+    const tagsParam = searchParams.get("tags");
+    const includedTags = tagsParam ? tagsParam.split(",").filter(Boolean) : [];
 
     if (query) {
-      const result = await searchManga(query, limit, offset);
+      const result = await searchManga(query, limit, offset, lang, includedTags);
       return NextResponse.json(result, {
         headers: {
           "Cache-Control": "public, max-age=120",
@@ -17,7 +20,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const result = await fetchMangaList(limit, offset);
+    const result = await fetchMangaList(limit, offset, lang, includedTags);
     return NextResponse.json(result, {
       headers: {
         "Cache-Control": "public, max-age=120",
@@ -27,6 +30,23 @@ export async function GET(req: NextRequest) {
     console.error("Manga API error:", error);
     return NextResponse.json(
       { error: "Failed to fetch manga" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const tags = await fetchTags();
+    return NextResponse.json(tags, {
+      headers: {
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      },
+    });
+  } catch (error) {
+    console.error("Tags API error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch tags" },
       { status: 500 }
     );
   }

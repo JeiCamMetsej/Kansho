@@ -1242,6 +1242,7 @@ export type MangaCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Manga.
    */
   data: Prisma.MangaCreateManyInput | Prisma.MangaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1260,6 +1261,7 @@ export type MangaCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Manga.
    */
   data: Prisma.MangaCreateManyInput | Prisma.MangaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
