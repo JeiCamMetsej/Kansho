@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  readList  ReadListItem[]
+  followers Follow[]     @relation("Following")
+  following Follow[]     @relation("Follower")
+}
+
+model Manga {
+  id          String   @id
+  title       String
+  description String   @default("")
+  coverUrl    String   @default("")
+  year        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  readListItems ReadListItem[]
+}
+
+model ReadListItem {
+  id        String   @id @default(cuid())
+  userId    String
+  mangaId   String
+  status    String   @default("plan_to_read")
+  rating    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mangaId])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
