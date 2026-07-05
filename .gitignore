@@ -38,6 +38,13 @@ yarn-error.log*
 # Allow .env.example to be committed
 !.env.example
 
+# Android APK artifacts
+*.apk
+
+# SQLite dev database
+dev.db
+dev.db-journal
+
 # vercel
 .vercel
 
