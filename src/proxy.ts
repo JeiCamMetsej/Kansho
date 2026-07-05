@@ -43,7 +43,7 @@ const AUTH_RATE_WINDOW = 15 * 60 * 1000; // 15 minutes
 const API_RATE_LIMIT = 60; // requests per window
 const API_RATE_WINDOW = 60 * 1000; // 1 minute
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Security headers

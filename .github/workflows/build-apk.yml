@@ -53,7 +53,7 @@ jobs:
       # ── Configure server URL ──
       - name: Set server URL in Capacitor config
         run: |
-          SERVER_URL="${{ github.event.inputs.server_url || secrets.SERVER_URL || 'http://10.0.2.2:3000' }}"
+          SERVER_URL="${{ github.event.inputs.server_url || secrets.SERVER_URL || 'https://kansho-j5yb4xly3-jeicammetsejs-projects.vercel.app' }}"
           echo "Using server URL: $SERVER_URL"
           jq --arg url "$SERVER_URL" '.server.url = $url' capacitor.config.json > capacitor.tmp.json
           mv capacitor.tmp.json capacitor.config.json

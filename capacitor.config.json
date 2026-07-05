@@ -3,8 +3,7 @@
   "appName": "Kanshō",
   "webDir": "out",
   "server": {
-    "url": "http://10.0.2.2:3000",
-    "cleartext": true
+    "url": "https://kansho-j5yb4xly3-jeicammetsejs-projects.vercel.app"
   },
   "android": {
     "buildOptions": {
