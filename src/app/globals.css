@@ -78,31 +78,31 @@
   color-scheme: dark;
 }
 
-/* Light mode (default) */
+/* Light mode — warm paper/cream */
 :root,
 .light {
-  --bg-primary: #ffffff;
-  --bg-secondary: #fafafa;
-  --bg-tertiary: #f5f5f5;
-  --text-primary: #111111;
-  --text-secondary: #555555;
-  --text-tertiary: #999999;
-  --border-primary: #e5e5e5;
-  --border-secondary: #f0f0f0;
-  --accent: #111111;
+  --bg-primary: #FFF9F0;
+  --bg-secondary: #F5EBDD;
+  --bg-tertiary: #EBDCC6;
+  --text-primary: #2E2820;
+  --text-secondary: #5C5245;
+  --text-tertiary: #7A6E60;
+  --border-primary: #D1C5B3;
+  --border-secondary: #E5DBCA;
+  --accent: #B06930;
 }
 
-/* Dark mode */
+/* Dark mode — deep navy */
 .dark {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-tertiary: #1a1a1a;
-  --text-primary: #ededed;
-  --text-secondary: #888888;
-  --text-tertiary: #555555;
-  --border-primary: #222222;
-  --border-secondary: #1a1a1a;
-  --accent: #ededed;
+  --bg-primary: #0B1221;
+  --bg-secondary: #162035;
+  --bg-tertiary: #202D45;
+  --text-primary: #E5EAF2;
+  --text-secondary: #B0B8C6;
+  --text-tertiary: #7D8899;
+  --border-primary: #2B3A5A;
+  --border-secondary: #1F2A42;
+  --accent: #5D9CEC;
 }
 
 /* Theme transition — smooth crossfade when theme changes */

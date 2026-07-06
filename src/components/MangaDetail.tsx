@@ -161,23 +161,9 @@ export default function MangaDetail({ id }: MangaDetailProps) {
             </div>
           )}
 
-          {/* Latest Chapter */}
-          {manga.latestChapter && (
-            <div className="mt-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--bg-tertiary)] rounded-sm">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">
-                  Latest Chapter
-                </span>
-                <span className="text-sm font-medium text-[var(--text-primary)]">
-                  Ch. {manga.latestChapter}
-                </span>
-              </div>
-            </div>
-          )}
-
           {/* Description */}
           {manga.description && (
-            <div className="mt-4">
+            <div className="mt-6">
               <h2 className="text-xs font-light uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
                 Description
               </h2>

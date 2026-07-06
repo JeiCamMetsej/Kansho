@@ -11,7 +11,6 @@ export interface MangaDexManga {
   coverUrl: string;
   year: number | null;
   tags: string[];
-  latestChapter?: string | null;
 }
 
 export interface MangaDexTag {
@@ -117,22 +116,6 @@ function extractDescription(
     Object.values(description).find((d) => d.length > 0) ||
     "";
   return stripHtml(raw);
-}
-
-export async function fetchLatestChapter(
-  mangaId: string,
-  lang: string = "en"
-): Promise<string | null> {
-  const url = `${MANGADEX_API}/manga/${mangaId}/feed?limit=1&order[publishAt]=desc&translatedLanguage[]=${lang}`;
-
-  try {
-    const res = await fetchWithRetry(url);
-    const data: { data: Array<{ attributes: { chapter: string | null } }> } = await res.json();
-    if (data.data.length === 0) return null;
-    return data.data[0].attributes.chapter;
-  } catch {
-    return null;
-  }
 }
 
 export async function fetchTags(): Promise<MangaDexTag[]> {
@@ -241,16 +224,9 @@ export async function fetchMangaById(
   const url = `${MANGADEX_API}/manga/${id}?includes[]=cover_art&includes[]=author`;
 
   try {
-    const [res, latestChapter] = await Promise.all([
-      fetchWithRetry(url),
-      fetchLatestChapter(id, lang),
-    ]);
-
+    const res = await fetchWithRetry(url);
     const data: { data: MangaDexResponse["data"][0] } = await res.json();
-    const manga = processMangaItem(data.data, lang);
-    manga.latestChapter = latestChapter;
-
-    return manga;
+    return processMangaItem(data.data, lang);
   } catch (err) {
     if (err instanceof Error && err.message.includes("404")) return null;
     throw err;
