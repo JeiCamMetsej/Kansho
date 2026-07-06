@@ -20,19 +20,17 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
+        continue-on-error: true
         with:
           release-type: node
           token: ${{ secrets.RELEASE_PLEASE_PAT || secrets.GITHUB_TOKEN }}
 
-  # ── Build release APK and upload to the release ──
+  # ── Build APK on every push (always runs) ──
   build-apk:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.release-please.outputs.tag_name }}
 
       # ── Node.js setup ──
       - name: Setup Node.js
@@ -115,7 +113,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      # ── Build release APK ──
+      # ── Build release APK (signed with temporary keystore if needed) ──
       - name: Build release APK
         run: cd android && ./gradlew assembleRelease
         env:
@@ -124,8 +122,18 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS || 'kansho' }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD || 'KanshoRelease2024' }}
 
-      # ── Upload APK to GitHub Release ──
+      # ── Upload APK as artifact (always) ──
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kansho-release
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      # ── Upload APK to GitHub Release (only if release-please created one) ──
       - name: Upload APK to release
+        if: ${{ needs.release-please.outputs.release_created }}
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
