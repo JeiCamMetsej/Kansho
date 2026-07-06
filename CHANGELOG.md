@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.2...v1.3.3) (2026-07-06)
+
+
+### Bug Fixes
+
+* always build APK on push, upload as artifact regardless of release-please status ([31e34ac](https://github.com/JeiCamMetsej/Kansho/commit/31e34aca9cb80d6b43d9d6a2094ec5ba8536b0dd))
+
 ## [1.3.2](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.1...v1.3.2) (2026-07-06)
 
 
