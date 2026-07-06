@@ -120,23 +120,23 @@ export default function SearchBar() {
 
       {/* Search tabs (only visible when there's a query) */}
       {hasQuery && (
-        <div className="flex items-center gap-0 border-b border-[var(--border-primary)]">
+        <div className="flex items-center gap-1 bg-[var(--bg-tertiary)] rounded-lg p-1">
           <button
             onClick={() => handleTabChange("manga")}
-            className={`px-5 py-2.5 text-sm font-semibold uppercase tracking-wider transition-all duration-150 active:brightness-75 border-b-2 -mb-[1px] ${
+            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-md transition-all duration-150 active:scale-95 ${
               activeTab === "manga"
-                ? "text-[var(--text-primary)] border-[var(--text-primary)]"
-                : "text-[var(--text-tertiary)] border-transparent hover:text-[var(--text-secondary)]"
+                ? "bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-sm"
+                : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
             }`}
           >
             Manga
           </button>
           <button
             onClick={() => handleTabChange("users")}
-            className={`px-5 py-2.5 text-sm font-semibold uppercase tracking-wider transition-all duration-150 active:brightness-75 border-b-2 -mb-[1px] ${
+            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-md transition-all duration-150 active:scale-95 ${
               activeTab === "users"
-                ? "text-[var(--text-primary)] border-[var(--text-primary)]"
-                : "text-[var(--text-tertiary)] border-transparent hover:text-[var(--text-secondary)]"
+                ? "bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-sm"
+                : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
             }`}
           >
             Users

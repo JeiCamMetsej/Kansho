@@ -84,14 +84,14 @@ export default function SearchFilters({
       <div className="flex items-center justify-between">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition-all duration-150 active:brightness-75 ${
+          className={`h-10 inline-flex items-center gap-2 px-4 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 ${
             hasActiveFilters
-              ? "text-[var(--text-primary)]"
-              : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+              ? "bg-[var(--bg-secondary)] text-[var(--text-primary)]"
+              : "bg-transparent text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-secondary)]"
           }`}
         >
           <svg
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+            className={`w-4 h-4 transition-transform duration-200 ${
               showFilters ? "rotate-90" : ""
             }`}
             fill="none"
@@ -102,12 +102,12 @@ export default function SearchFilters({
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M9 5l7 7-7 7"
+              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
             />
           </svg>
           Filters
           {activeFilterCount > 0 && (
-            <span className="inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)]">
+            <span className="inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)]">
               {activeFilterCount}
             </span>
           )}
@@ -116,7 +116,7 @@ export default function SearchFilters({
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="text-[11px] text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-all duration-150 active:brightness-75 underline underline-offset-2"
+            className="h-10 px-4 text-[11px] font-semibold uppercase tracking-wider rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-secondary)] transition-all duration-150 active:scale-95"
           >
             Clear all
           </button>
@@ -125,13 +125,13 @@ export default function SearchFilters({
 
       {/* Filter panel */}
       {showFilters && (
-        <div className="p-4 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm space-y-4">
+        <div className="p-4 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-lg space-y-4">
           {/* Read status */}
           <div>
             <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
               Read Status
             </h3>
-            <div className="flex gap-1">
+            <div className="flex gap-1.5">
               {(
                 [
                   { value: "all", label: "All" },
@@ -142,7 +142,7 @@ export default function SearchFilters({
                 <button
                   key={option.value}
                   onClick={() => onReadStatusChange(option.value)}
-                  className={`px-3 py-1.5 text-[11px] font-medium rounded-sm transition-all duration-150 active:brightness-75 ${
+                  className={`h-9 px-4 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 ${
                     readStatus === option.value
                       ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
                       : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
@@ -164,7 +164,7 @@ export default function SearchFilters({
                 {Array.from({ length: 8 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-6 w-16 bg-[var(--bg-tertiary)] rounded-sm animate-pulse"
+                    className="h-8 w-16 bg-[var(--bg-tertiary)] rounded-lg animate-pulse"
                   />
                 ))}
               </div>
@@ -174,7 +174,7 @@ export default function SearchFilters({
                   <button
                     key={tag.id}
                     onClick={() => handleTagToggle(tag.id)}
-                    className={`px-2.5 py-1 text-[11px] font-medium rounded-sm transition-all duration-150 active:brightness-75 border ${
+                    className={`h-8 px-3 text-xs font-medium rounded-lg transition-all duration-150 active:scale-95 border ${
                       selectedTags.includes(tag.id)
                         ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)]"
                         : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-transparent hover:border-[var(--border-primary)]"
