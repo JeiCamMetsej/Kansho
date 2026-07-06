@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.4.1...v1.5.0) (2026-07-06)
+
+
+### Features
+
+* update logo and add padding to prevent icon cropping ([66f121b](https://github.com/JeiCamMetsej/Kansho/commit/66f121b594657f3af00df986715284c60f69bd4a))
+
 ## [1.4.1](https://github.com/JeiCamMetsej/Kansho/compare/v1.4.0...v1.4.1) (2026-07-06)
 
 
