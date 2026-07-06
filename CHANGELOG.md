@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.0...v1.3.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* generate temporary keystore when KEYSTORE_BASE64 secret is not set ([1aa44a6](https://github.com/JeiCamMetsej/Kansho/commit/1aa44a67e2c522c783cf017897740641996993e3))
+
 ## [1.3.0](https://github.com/JeiCamMetsej/Shelf/compare/v1.2.0...v1.3.0) (2026-07-06)
 
 
