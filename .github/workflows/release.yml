@@ -1,28 +1,38 @@
-name: Build Android APK
+name: Release
 
 on:
   push:
     branches: [master]
-    tags: ['v*']
-  workflow_dispatch:
-    inputs:
-      server_url:
-        description: 'Backend server URL that the APK will connect to'
-        required: false
-        default: ''
-      build_type:
-        description: 'Build type: debug or release'
-        required: false
-        default: 'debug'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  build:
+  release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+          token: ${{ secrets.GITHUB_TOKEN }}
 
+  # ── Build release APK and upload to the release ──
+  build-apk:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
 
       # ── Node.js setup ──
       - name: Setup Node.js
@@ -53,13 +63,13 @@ jobs:
       # ── Configure server URL ──
       - name: Set server URL in Capacitor config
         run: |
-          SERVER_URL="${{ github.event.inputs.server_url || secrets.SERVER_URL || 'https://kansho-j5yb4xly3-jeicammetsejs-projects.vercel.app' }}"
+          SERVER_URL="${{ secrets.SERVER_URL || 'https://kansho-j5yb4xly3-jeicammetsejs-projects.vercel.app' }}"
           echo "Using server URL: $SERVER_URL"
           jq --arg url "$SERVER_URL" '.server.url = $url' capacitor.config.json > capacitor.tmp.json
           mv capacitor.tmp.json capacitor.config.json
           cat capacitor.config.json
 
-      # ── Decode release keystore (if KEYSTORE_BASE64 secret is set) ──
+      # ── Decode release keystore ──
       - name: Decode release keystore
         run: |
           if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
@@ -97,47 +107,22 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
-      # ── Determine build type ──
-      - name: Determine build type
-        id: build_type
-        run: |
-          BUILD_TYPE="${{ github.event.inputs.build_type }}"
-          if [ -z "$BUILD_TYPE" ]; then
-            # On tags: release, otherwise: debug
-            if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-              BUILD_TYPE="release"
-            else
-              BUILD_TYPE="debug"
-            fi
-          fi
-          echo "BUILD_TYPE=$BUILD_TYPE" >> $GITHUB_OUTPUT
-          echo "Building: $BUILD_TYPE"
-
       # ── Make gradlew executable ──
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      # ── Build APK ──
-      - name: Build APK
-        run: |
-          cd android
-          BUILD_TYPE="${{ steps.build_type.outputs.BUILD_TYPE }}"
-          if [ "$BUILD_TYPE" = "release" ]; then
-            ./gradlew assembleRelease
-          else
-            ./gradlew assembleDebug
-          fi
+      # ── Build release APK ──
+      - name: Build release APK
+        run: cd android && ./gradlew assembleRelease
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/android/app/kansho-release-key.jks
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD || 'KanshoRelease2024' }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS || 'kansho' }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD || 'KanshoRelease2024' }}
 
-      # ── Upload APK as artifact ──
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      # ── Upload APK to GitHub Release ──
+      - name: Upload APK to release
+        uses: softprops/action-gh-release@v3
         with:
-          name: Kansho-${{ steps.build_type.outputs.BUILD_TYPE }}
-          path: android/app/build/outputs/apk/${{ steps.build_type.outputs.BUILD_TYPE }}/app-${{ steps.build_type.outputs.BUILD_TYPE }}.apk
-          retention-days: 30
-          if-no-files-found: error
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          files: android/app/build/outputs/apk/release/app-release.apk
