@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.1...v1.3.2) (2026-07-06)
+
+
+### Bug Fixes
+
+* update readme and trigger new release ([145ce22](https://github.com/JeiCamMetsej/Kansho/commit/145ce22cd566193140a427fcde52eb6da243e911))
+
 ## [1.3.1](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.0...v1.3.1) (2026-07-06)
 
 
