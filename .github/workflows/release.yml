@@ -69,14 +69,18 @@ jobs:
           mv capacitor.tmp.json capacitor.config.json
           cat capacitor.config.json
 
-      # ── Decode release keystore ──
-      - name: Decode release keystore
+      # ── Decode or generate release keystore ──
+      - name: Decode or generate release keystore
         run: |
           if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
             echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/kansho-release-key.jks
             echo "Keystore decoded successfully"
           else
-            echo "No KEYSTORE_BASE64 secret set — skipping keystore decode"
+            echo "No KEYSTORE_BASE64 secret set — generating temporary keystore for testing"
+            keytool -genkey -v -keystore android/app/kansho-release-key.jks \
+              -alias kansho -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass KanshoRelease2024 -keypass KanshoRelease2024 \
+              -dname "CN=Kansho, OU=Kansho, O=Kansho, L=Unknown, ST=Unknown, C=US"
           fi
 
       # ── Accept Android SDK licenses ──
