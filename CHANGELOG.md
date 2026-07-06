@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/JeiCamMetsej/Kansho/compare/v1.4.0...v1.4.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* repair Android adaptive icon XML references and add PWA manifest with splash screen ([0eab5b1](https://github.com/JeiCamMetsej/Kansho/commit/0eab5b15fd71305e8ba35ac02aa6a6d51a40e7c3))
+
 ## [1.4.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.5...v1.4.0) (2026-07-06)
 
 
