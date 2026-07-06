@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.5...v1.4.0) (2026-07-06)
+
+
+### Features
+
+* add OG tags, favicon, and apple touch icon using logo ([3410cf8](https://github.com/JeiCamMetsej/Kansho/commit/3410cf82753c5f224ce4d2695fcfbea6eb0e6303))
+
 ## [1.3.3](https://github.com/JeiCamMetsej/Kansho/compare/v1.3.2...v1.3.3) (2026-07-06)
 
 
