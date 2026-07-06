@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/JeiCamMetsej/Shelf/compare/v1.2.0...v1.3.0) (2026-07-06)
+
+
+### Features
+
+* improve Header theme toggle and auth buttons for mobile ([610ca53](https://github.com/JeiCamMetsej/Shelf/commit/610ca53bc91d7753c267ce264acf75de694db39e))
+* improve mobile buttons with icons, bigger touch targets, and rounded corners ([f6f2939](https://github.com/JeiCamMetsej/Shelf/commit/f6f29398b80f99f76e1d593a5251ec1018261a84))
+
 ## [1.2.0](https://github.com/JeiCamMetsej/Shelf/compare/v1.1.0...v1.2.0) (2026-07-06)
 
 
