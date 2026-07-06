@@ -22,7 +22,7 @@ jobs:
         id: release
         with:
           release-type: node
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PLEASE_PAT || secrets.GITHUB_TOKEN }}
 
   # ── Build release APK and upload to the release ──
   build-apk:
