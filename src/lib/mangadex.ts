@@ -11,6 +11,7 @@ export interface MangaDexManga {
   coverUrl: string;
   year: number | null;
   tags: string[];
+  latestChapter?: string | null;
 }
 
 export interface MangaDexTag {
@@ -58,7 +59,9 @@ function extractCoverUrl(
 ): string {
   const coverArt = relationships.find((r) => r.type === "cover_art");
   if (coverArt?.attributes?.fileName) {
-    return `https://uploads.mangadex.org/covers/${mangaId}/${coverArt.attributes.fileName}.512.jpg`;
+    // Use the raw fileName (UUID without extension) — the proxy adds the .512.jpg suffix
+    const fileName = coverArt.attributes.fileName.replace(/\.\w+$/, "");
+    return `/api/proxy/cover/${mangaId}/${fileName}`;
   }
   return "";
 }
@@ -114,6 +117,22 @@ function extractDescription(
     Object.values(description).find((d) => d.length > 0) ||
     "";
   return stripHtml(raw);
+}
+
+export async function fetchLatestChapter(
+  mangaId: string,
+  lang: string = "en"
+): Promise<string | null> {
+  const url = `${MANGADEX_API}/manga/${mangaId}/feed?limit=1&order[publishAt]=desc&translatedLanguage[]=${lang}`;
+
+  try {
+    const res = await fetchWithRetry(url);
+    const data: { data: Array<{ attributes: { chapter: string | null } }> } = await res.json();
+    if (data.data.length === 0) return null;
+    return data.data[0].attributes.chapter;
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchTags(): Promise<MangaDexTag[]> {
@@ -222,9 +241,16 @@ export async function fetchMangaById(
   const url = `${MANGADEX_API}/manga/${id}?includes[]=cover_art&includes[]=author`;
 
   try {
-    const res = await fetchWithRetry(url);
+    const [res, latestChapter] = await Promise.all([
+      fetchWithRetry(url),
+      fetchLatestChapter(id, lang),
+    ]);
+
     const data: { data: MangaDexResponse["data"][0] } = await res.json();
-    return processMangaItem(data.data, lang);
+    const manga = processMangaItem(data.data, lang);
+    manga.latestChapter = latestChapter;
+
+    return manga;
   } catch (err) {
     if (err instanceof Error && err.message.includes("404")) return null;
     throw err;
