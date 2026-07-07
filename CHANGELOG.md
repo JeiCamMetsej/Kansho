@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.5.0...v1.6.0) (2026-07-07)
+
+
+### Features
+
+* mobile-first UI overhaul, add manga status scraping and filtering ([f5b7b9d](https://github.com/JeiCamMetsej/Kansho/commit/f5b7b9dbbcd96f4bd4f7c33f9229982618477986))
+
+
+### Bug Fixes
+
+* use theme-aware colors for QuickAddButton default state ([e9b5737](https://github.com/JeiCamMetsej/Kansho/commit/e9b57375c5000888a0396638ce027b1d7ab18c3d))
+
 ## [1.5.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.4.1...v1.5.0) (2026-07-06)
 
 
