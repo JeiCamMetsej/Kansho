@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.6.0...v1.7.0) (2026-07-07)
+
+
+### Features
+
+* add CoverImage component with loading skeleton, 3-layer caching for covers, and 256px default cover size ([00f5f84](https://github.com/JeiCamMetsej/Kansho/commit/00f5f84123a8b39cecc020b9f21868145b99a748))
+
 ## [1.6.0](https://github.com/JeiCamMetsej/Kansho/compare/v1.5.0...v1.6.0) (2026-07-07)
 
 
