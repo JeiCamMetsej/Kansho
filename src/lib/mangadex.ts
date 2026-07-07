@@ -60,7 +60,7 @@ function extractCoverUrl(
 ): string {
   const coverArt = relationships.find((r) => r.type === "cover_art");
   if (coverArt?.attributes?.fileName) {
-    // Use the raw fileName (UUID without extension) — the proxy adds the .512.jpg suffix
+    // Strip extension and let the proxy determine the resolution via the ?size= query param (default 256)
     const fileName = coverArt.attributes.fileName.replace(/\.\w+$/, "");
     return `/api/proxy/cover/${mangaId}/${fileName}`;
   }

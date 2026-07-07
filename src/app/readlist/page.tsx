@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import StarRating from "@/components/StarRating";
+import CoverImage from "@/components/CoverImage";
 
 interface ReadListItem {
   id: string;
@@ -123,21 +124,12 @@ export default function ReadlistPage() {
               className="group block"
             >
               <article className="space-y-2">
-                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
-                  {item.manga.coverUrl ? (
-                    <img
-                      src={item.manga.coverUrl}
-                      alt={item.manga.title}
-                      className="w-full h-full object-cover transition-opacity group-hover:opacity-80"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl font-light text-[var(--text-tertiary)]">
-                        ?
-                      </span>
-                    </div>
-                  )}
+                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden relative">
+                  <CoverImage
+                    src={item.manga.coverUrl || ""}
+                    alt={item.manga.title}
+                    className="transition-opacity group-hover:opacity-80"
+                  />
                 </div>
                 <div className="space-y-0.5">
                   <h3 className="text-xs font-light text-[var(--text-primary)] leading-tight line-clamp-2">

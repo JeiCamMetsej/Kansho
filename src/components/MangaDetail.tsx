@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import type { MangaDexManga } from "@/lib/mangadex";
 import AddToListButton from "./AddToListButton";
 import StarRating from "./StarRating";
+import CoverImage from "./CoverImage";
 
 interface MangaDetailProps {
   id: string;
@@ -18,7 +19,6 @@ export default function MangaDetail({ id }: MangaDetailProps) {
   const [currentStatus, setCurrentStatus] = useState<string | null>(null);
   const [currentRating, setCurrentRating] = useState<number | null>(null);
   const [currentReview, setCurrentReview] = useState<string | null>(null);
-  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     const fetchManga = async () => {
@@ -26,6 +26,12 @@ export default function MangaDetail({ id }: MangaDetailProps) {
         const res = await fetch(`/api/manga/${id}`);
         if (!res.ok) throw new Error("Manga not found");
         const data = await res.json();
+        // Request larger 512px cover for the detail view
+        if (data.coverUrl) {
+          data.coverUrl = data.coverUrl.includes("?")
+            ? data.coverUrl.replace(/size=\d+/, "size=512")
+            : `${data.coverUrl}?size=512`;
+        }
         setManga(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load manga");
@@ -85,21 +91,12 @@ export default function MangaDetail({ id }: MangaDetailProps) {
       {/* Cover - full width on mobile */}
       <div className="flex flex-col items-center sm:flex-row sm:items-start gap-5">
         <div className="w-36 sm:w-48 shrink-0">
-          <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm">
-            {manga.coverUrl && !imgError ? (
-              <img
-                src={manga.coverUrl}
-                alt={manga.title}
-                className="w-full h-full object-cover"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-3xl font-light text-[var(--text-tertiary)]">
-                  ?
-                </span>
-              </div>
-            )}
+          <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm relative">
+            <CoverImage
+              src={manga.coverUrl || ""}
+              alt={manga.title}
+              priority
+            />
           </div>
         </div>
 

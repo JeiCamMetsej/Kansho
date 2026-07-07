@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import type { MangaDexManga } from "@/lib/mangadex";
 import QuickAddButton from "./QuickAddButton";
+import CoverImage from "./CoverImage";
 
 const STATUS_BADGE: Record<string, string> = {
   plan_to_read: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
@@ -19,7 +19,6 @@ interface MangaCardProps {
 }
 
 export default function MangaCard({ manga, readlistStatus, onStatusChange }: MangaCardProps) {
-  const [imgError, setImgError] = useState(false);
 
   return (
     <Link
@@ -29,26 +28,16 @@ export default function MangaCard({ manga, readlistStatus, onStatusChange }: Man
       <article className="space-y-1.5">
         {/* Cover Image */}
         <div className="relative aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm">
-          {manga.coverUrl && !imgError ? (
-            <img
-              src={manga.coverUrl}
-              alt={manga.title}
-              className="w-full h-full object-cover"
-              onError={() => setImgError(true)}
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
+          <CoverImage
+            src={manga.coverUrl}
+            alt={manga.title}
+            fallback={
               <div className="text-center p-4">
-                <div className="text-2xl font-light text-[var(--text-tertiary)]">
-                  ?
-                </div>
-                <div className="text-xs text-[var(--text-tertiary)] mt-1 line-clamp-2">
-                  {manga.title}
-                </div>
+                <div className="text-2xl font-light text-[var(--text-tertiary)]">?</div>
+                <div className="text-xs text-[var(--text-tertiary)] mt-1 line-clamp-2">{manga.title}</div>
               </div>
-            </div>
-          )}
+            }
+          />
 
           {/* Quick add button */}
           <div className="absolute top-1.5 right-1.5">

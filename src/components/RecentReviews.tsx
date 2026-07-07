@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import StarRating from "./StarRating";
+import CoverImage from "./CoverImage";
 
 interface ReviewItem {
   id: string;
@@ -50,20 +51,12 @@ export default function RecentReviews() {
             {/* Manga cover thumbnail */}
             <Link
               href={`/manga/${item.manga.id}`}
-              className="shrink-0 w-10 rounded-lg overflow-hidden bg-[var(--bg-tertiary)] aspect-[3/4]"
+              className="shrink-0 w-10 rounded-lg overflow-hidden bg-[var(--bg-tertiary)] aspect-[3/4] relative"
             >
-              {item.manga.coverUrl ? (
-                <img
-                  src={item.manga.coverUrl}
-                  alt={item.manga.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-[8px] text-[var(--text-tertiary)]">
-                  ?
-                </div>
-              )}
+              <CoverImage
+                src={item.manga.coverUrl || ""}
+                alt={item.manga.title}
+              />
             </Link>
 
             {/* Content */}

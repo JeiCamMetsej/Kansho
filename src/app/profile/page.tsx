@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import StarRating from "@/components/StarRating";
 import FollowButton from "@/components/FollowButton";
+import CoverImage from "@/components/CoverImage";
 
 interface FollowUser {
   id: string;
@@ -260,21 +261,11 @@ export default function ProfilePage() {
               className="active:scale-[0.97] transition-transform duration-150"
             >
               <article className="space-y-1.5">
-                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm">
-                  {item.manga.coverUrl ? (
-                    <img
-                      src={item.manga.coverUrl}
-                      alt={item.manga.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl font-light text-[var(--text-tertiary)]">
-                        ?
-                      </span>
-                    </div>
-                  )}
+                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm relative">
+                  <CoverImage
+                    src={item.manga.coverUrl || ""}
+                    alt={item.manga.title}
+                  />
                 </div>
                 <div className="space-y-0.5 px-0.5">
                   <h3 className="text-[11px] font-light text-[var(--text-primary)] leading-tight line-clamp-2">
