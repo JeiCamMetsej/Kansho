@@ -66,7 +66,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border-primary)] bg-[var(--bg-primary)]/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom,0px)]">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border-primary)] bg-[var(--bg-primary)]/90 backdrop-blur-xl pb-safe">
       <div className="flex items-center justify-around h-16 px-1 max-w-lg mx-auto">
         {items.map((item) => {
           const isActive =
@@ -82,11 +82,10 @@ export default function BottomNav() {
               className={`relative flex items-center justify-center w-14 h-14 rounded-2xl transition-all duration-200 active:scale-90 ${
                 isActive
                   ? "text-[var(--text-primary)] bg-[var(--bg-secondary)]"
-                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/40"
+                  : "text-[var(--text-tertiary)]"
               }`}
             >
               {item.icon(isActive)}
-              {/* Active indicator dot */}
               {isActive && (
                 <span className="absolute bottom-1.5 w-1 h-1 rounded-full bg-[var(--text-primary)]" />
               )}

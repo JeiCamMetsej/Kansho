@@ -18,10 +18,6 @@ export default function SearchBar() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastNavigatedQuery = useRef(queryFromUrl);
 
-  // Sync local state with URL (browser back/forward, initial load)
-  // Note: intentionally does NOT update lastNavigatedQuery — that ref tracks
-  // the last query the debounce committed, and is used to distinguish external
-  // URL changes (browser nav) from user typing.
   useEffect(() => {
     setQuery(queryFromUrl);
   }, [queryFromUrl]);
@@ -47,16 +43,13 @@ export default function SearchBar() {
     [router]
   );
 
-  // Debounced search on every keystroke
   useEffect(() => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
     const trimmed = query.trim();
-    // Already up to date
     if (trimmed === lastNavigatedQuery.current) return;
-    // URL was changed externally (browser back/forward) — don't fight it
     if (queryFromUrl !== lastNavigatedQuery.current) return;
 
     debounceRef.current = setTimeout(() => {
@@ -100,17 +93,17 @@ export default function SearchBar() {
   return (
     <div className="space-y-3">
       {/* Search input */}
-      <form onSubmit={handleSubmit} className="relative w-full max-w-md">
+      <form onSubmit={handleSubmit} className="relative w-full">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search manga or users..."
-          className="w-full h-12 pl-4 pr-10 text-base bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+          className="w-full h-12 px-4 pr-11 text-base bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-2xl text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-all duration-150 active:brightness-75"
+          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] transition-all duration-150 active:text-[var(--text-secondary)]"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -120,23 +113,23 @@ export default function SearchBar() {
 
       {/* Search tabs (only visible when there's a query) */}
       {hasQuery && (
-        <div className="flex items-center gap-1 bg-[var(--bg-tertiary)] rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-[var(--bg-tertiary)] rounded-2xl p-1">
           <button
             onClick={() => handleTabChange("manga")}
-            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-md transition-all duration-150 active:scale-95 ${
+            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-150 active:scale-[0.97] ${
               activeTab === "manga"
                 ? "bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-sm"
-                : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                : "text-[var(--text-tertiary)]"
             }`}
           >
             Manga
           </button>
           <button
             onClick={() => handleTabChange("users")}
-            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-md transition-all duration-150 active:scale-95 ${
+            className={`h-9 flex-1 px-5 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-150 active:scale-[0.97] ${
               activeTab === "users"
                 ? "bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-sm"
-                : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]"
+                : "text-[var(--text-tertiary)]"
             }`}
           >
             Users

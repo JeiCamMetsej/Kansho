@@ -57,7 +57,7 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="mx-auto max-w-sm px-4 py-16 sm:py-24">
+    <div className="mx-auto max-w-sm px-4 py-12">
       <div className="mb-8">
         <h1 className="text-xl font-light tracking-tight text-[var(--text-primary)]">
           {mode === "login" ? "Sign in" : "Create account"}
@@ -85,7 +85,7 @@ export default function LoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               required
               minLength={3}
-              className="w-full h-12 px-4 text-base bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+              className="w-full h-12 px-4 text-base bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
               placeholder="your username"
             />
           </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full h-9 px-3 text-sm bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+            className="w-full h-12 px-4 text-base bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
             placeholder="you@example.com"
           />
         </div>
@@ -123,7 +123,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
-            className="w-full h-9 px-3 text-sm bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+            className="w-full h-12 px-4 text-base bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
             placeholder="••••••••"
           />
         </div>
@@ -135,7 +135,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full h-12 text-sm font-semibold uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-sm transition-all duration-150 hover:brightness-110 active:brightness-75 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full h-12 text-sm font-semibold uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading
             ? "Please wait..."
@@ -151,7 +151,7 @@ export default function LoginPage() {
             setMode(mode === "login" ? "register" : "login");
             setError(null);
           }}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline underline-offset-2 transition-all duration-150 active:brightness-75"
+          className="text-sm text-[var(--text-secondary)] underline underline-offset-2 transition-all duration-150 active:text-[var(--text-primary)]"
         >
           {mode === "login"
             ? "Don't have an account? Sign up"

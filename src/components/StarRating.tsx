@@ -47,9 +47,8 @@ export default function StarRating({
             }}
             disabled={disabled || !interactive}
             className={`relative ${btn} flex items-center justify-center ${
-              interactive
-                ? "cursor-pointer transition-transform duration-100 active:scale-75"
-                : ""
+              interactive              ? "cursor-pointer active:scale-75"
+              : ""
             } disabled:cursor-not-allowed`}
             title={interactive ? `${star - 0.5} ★ – ${star} ★` : undefined}
           >

@@ -90,7 +90,7 @@ export default function PopularManga() {
               setLoading(true);
               fetchManga(0);
             }}
-            className="mt-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline transition-all duration-150 active:brightness-75"
+            className="mt-2 text-sm text-[var(--text-secondary)] underline transition-all duration-150 active:text-[var(--text-primary)]"
           >
             Try again
           </button>
@@ -112,6 +112,17 @@ export default function PopularManga() {
           <MangaGrid
             manga={manga}
             readlistStatuses={readlistStatuses}
+            onStatusChange={(mangaId, newStatus) =>
+              setReadlistStatuses((prev) => {
+                const next = { ...prev };
+                if (newStatus) {
+                  next[mangaId] = newStatus;
+                } else {
+                  delete next[mangaId];
+                }
+                return next;
+              })
+            }
           />
 
           {manga.length > 0 && offset + 20 < total && (
@@ -119,7 +130,7 @@ export default function PopularManga() {
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="px-8 h-12 text-sm font-semibold uppercase tracking-wider border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] transition-all duration-150 active:brightness-75 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-8 h-12 text-sm font-semibold uppercase tracking-wider border border-[var(--border-primary)] text-[var(--text-secondary)] rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loadingMore ? "Loading..." : "Load More"}
               </button>

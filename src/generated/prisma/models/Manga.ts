@@ -40,6 +40,7 @@ export type MangaMinAggregateOutputType = {
   description: string | null
   coverUrl: string | null
   year: number | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +51,7 @@ export type MangaMaxAggregateOutputType = {
   description: string | null
   coverUrl: string | null
   year: number | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +62,7 @@ export type MangaCountAggregateOutputType = {
   description: number
   coverUrl: number
   year: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,6 +83,7 @@ export type MangaMinAggregateInputType = {
   description?: true
   coverUrl?: true
   year?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -90,6 +94,7 @@ export type MangaMaxAggregateInputType = {
   description?: true
   coverUrl?: true
   year?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +105,7 @@ export type MangaCountAggregateInputType = {
   description?: true
   coverUrl?: true
   year?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -197,6 +203,7 @@ export type MangaGroupByOutputType = {
   description: string
   coverUrl: string
   year: number | null
+  status: string
   createdAt: Date
   updatedAt: Date
   _count: MangaCountAggregateOutputType | null
@@ -230,6 +237,7 @@ export type MangaWhereInput = {
   description?: Prisma.StringFilter<"Manga"> | string
   coverUrl?: Prisma.StringFilter<"Manga"> | string
   year?: Prisma.IntNullableFilter<"Manga"> | number | null
+  status?: Prisma.StringFilter<"Manga"> | string
   createdAt?: Prisma.DateTimeFilter<"Manga"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Manga"> | Date | string
   readListItems?: Prisma.ReadListItemListRelationFilter
@@ -241,6 +249,7 @@ export type MangaOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   year?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   readListItems?: Prisma.ReadListItemOrderByRelationAggregateInput
@@ -255,6 +264,7 @@ export type MangaWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Manga"> | string
   coverUrl?: Prisma.StringFilter<"Manga"> | string
   year?: Prisma.IntNullableFilter<"Manga"> | number | null
+  status?: Prisma.StringFilter<"Manga"> | string
   createdAt?: Prisma.DateTimeFilter<"Manga"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Manga"> | Date | string
   readListItems?: Prisma.ReadListItemListRelationFilter
@@ -266,6 +276,7 @@ export type MangaOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   year?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MangaCountOrderByAggregateInput
@@ -284,6 +295,7 @@ export type MangaScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Manga"> | string
   coverUrl?: Prisma.StringWithAggregatesFilter<"Manga"> | string
   year?: Prisma.IntNullableWithAggregatesFilter<"Manga"> | number | null
+  status?: Prisma.StringWithAggregatesFilter<"Manga"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Manga"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Manga"> | Date | string
 }
@@ -294,6 +306,7 @@ export type MangaCreateInput = {
   description?: string
   coverUrl?: string
   year?: number | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   readListItems?: Prisma.ReadListItemCreateNestedManyWithoutMangaInput
@@ -305,6 +318,7 @@ export type MangaUncheckedCreateInput = {
   description?: string
   coverUrl?: string
   year?: number | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   readListItems?: Prisma.ReadListItemUncheckedCreateNestedManyWithoutMangaInput
@@ -316,6 +330,7 @@ export type MangaUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   readListItems?: Prisma.ReadListItemUpdateManyWithoutMangaNestedInput
@@ -327,6 +342,7 @@ export type MangaUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   readListItems?: Prisma.ReadListItemUncheckedUpdateManyWithoutMangaNestedInput
@@ -338,6 +354,7 @@ export type MangaCreateManyInput = {
   description?: string
   coverUrl?: string
   year?: number | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -348,6 +365,7 @@ export type MangaUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,6 +376,7 @@ export type MangaUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,6 +387,7 @@ export type MangaCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -382,6 +402,7 @@ export type MangaMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -392,6 +413,7 @@ export type MangaMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -433,6 +455,7 @@ export type MangaCreateWithoutReadListItemsInput = {
   description?: string
   coverUrl?: string
   year?: number | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -443,6 +466,7 @@ export type MangaUncheckedCreateWithoutReadListItemsInput = {
   description?: string
   coverUrl?: string
   year?: number | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -469,6 +493,7 @@ export type MangaUpdateWithoutReadListItemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -479,6 +504,7 @@ export type MangaUncheckedUpdateWithoutReadListItemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   coverUrl?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -520,6 +546,7 @@ export type MangaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   description?: boolean
   coverUrl?: boolean
   year?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   readListItems?: boolean | Prisma.Manga$readListItemsArgs<ExtArgs>
@@ -532,6 +559,7 @@ export type MangaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   coverUrl?: boolean
   year?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["manga"]>
@@ -542,6 +570,7 @@ export type MangaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   coverUrl?: boolean
   year?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["manga"]>
@@ -552,11 +581,12 @@ export type MangaSelectScalar = {
   description?: boolean
   coverUrl?: boolean
   year?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MangaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "coverUrl" | "year" | "createdAt" | "updatedAt", ExtArgs["result"]["manga"]>
+export type MangaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "coverUrl" | "year" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["manga"]>
 export type MangaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   readListItems?: boolean | Prisma.Manga$readListItemsArgs<ExtArgs>
   _count?: boolean | Prisma.MangaCountOutputTypeDefaultArgs<ExtArgs>
@@ -575,6 +605,7 @@ export type $MangaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     description: string
     coverUrl: string
     year: number | null
+    status: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["manga"]>
@@ -1006,6 +1037,7 @@ export interface MangaFieldRefs {
   readonly description: Prisma.FieldRef<"Manga", 'String'>
   readonly coverUrl: Prisma.FieldRef<"Manga", 'String'>
   readonly year: Prisma.FieldRef<"Manga", 'Int'>
+  readonly status: Prisma.FieldRef<"Manga", 'String'>
   readonly createdAt: Prisma.FieldRef<"Manga", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Manga", 'DateTime'>
 }

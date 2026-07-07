@@ -22,7 +22,6 @@ export default function RateModal({
   const [review, setReview] = useState<string>(currentReview ?? "");
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -31,7 +30,6 @@ export default function RateModal({
     return () => document.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  // Focus trap — focus the modal on mount
   useEffect(() => {
     modalRef.current?.focus();
   }, []);
@@ -45,20 +43,20 @@ export default function RateModal({
   }, [onSave]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
         onClick={onClose}
       />
 
-      {/* Modal */}
+      {/* Modal — slides up from bottom on mobile */}
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="relative w-full max-w-sm mx-4 bg-[var(--bg-primary)] border border-[var(--border-primary)] rounded-sm shadow-xl outline-none"
+        className="relative w-full sm:max-w-sm sm:mx-4 bg-[var(--bg-primary)] border border-[var(--border-primary)] rounded-t-3xl sm:rounded-3xl shadow-xl outline-none pb-safe"
       >
-        <div className="p-5 space-y-5">
+        <div className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-light text-[var(--text-primary)]">
@@ -66,7 +64,7 @@ export default function RateModal({
             </h2>
             <button
               onClick={onClose}
-              className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+              className="flex items-center justify-center w-8 h-8 rounded-xl text-[var(--text-tertiary)] transition-all duration-150 active:bg-[var(--bg-secondary)] active:text-[var(--text-primary)]"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -104,7 +102,7 @@ export default function RateModal({
               placeholder="What did you think?"
               rows={3}
               disabled={loading}
-              className="w-full px-3 py-2 text-xs bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-sm text-[var(--text-primary)] placeholder-[var(--text-tertiary)] resize-none focus:outline-none focus:border-[var(--text-secondary)] transition-colors disabled:opacity-50"
+              className="w-full px-4 py-3 text-sm bg-[var(--bg-tertiary)] border border-[var(--border-primary)] rounded-xl text-[var(--text-primary)] placeholder-[var(--text-tertiary)] resize-none focus:outline-none focus:border-[var(--text-secondary)] transition-colors disabled:opacity-50"
               maxLength={500}
             />
             <p className="text-[10px] text-[var(--text-tertiary)] text-right">
@@ -117,7 +115,7 @@ export default function RateModal({
             <button
               onClick={handleClear}
               disabled={loading || (rating === null && !review)}
-              className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-all duration-150 active:brightness-75 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-4 h-11 text-xs font-semibold uppercase tracking-wider rounded-xl text-[var(--text-tertiary)] transition-all duration-150 active:text-[var(--text-secondary)] disabled:opacity-30 disabled:cursor-not-allowed"
             >
               Clear
             </button>
@@ -125,14 +123,14 @@ export default function RateModal({
               <button
                 onClick={onClose}
                 disabled={loading}
-                className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] border border-[var(--border-primary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] rounded-sm transition-all duration-150 active:brightness-75 disabled:opacity-40"
+                className="px-5 h-11 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] border border-[var(--border-primary)] rounded-xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={loading}
-                className="px-5 py-2 text-xs font-semibold uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-sm transition-all duration-150 hover:brightness-110 active:brightness-75 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-5 h-11 text-xs font-semibold uppercase tracking-wider bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading ? "Saving…" : rating === null && !review ? "Remove" : "Save"}
               </button>

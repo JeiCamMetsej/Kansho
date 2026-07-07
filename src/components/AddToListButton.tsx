@@ -109,14 +109,12 @@ export default function AddToListButton({
 
   const handleRateSave = useCallback(
     async (newRating: number | null, newReview: string | null) => {
-      // Nothing to save / clear — just close
       if (!status && newRating === null && newReview === null) {
         setShowRateModal(false);
         return;
       }
 
       if (!status) {
-        // Auto-add with plan_to_read before rating/review
         await withLoading("Adding…", async () => {
           const res = await fetch("/api/readlist", {
             method: "POST",
@@ -184,18 +182,18 @@ export default function AddToListButton({
 
   return (
     <div className="space-y-3">
-      {/* Status buttons — always visible */}
-      <div className="flex flex-wrap gap-2">
+      {/* Status buttons */}
+      <div className="flex flex-wrap gap-2.5">
         {(Object.entries(STATUS_CONFIG) as [StatusOption, typeof STATUS_CONFIG[StatusOption]][]).map(
           ([key, config]) => (
             <button
               key={key}
               onClick={() => handleStatusChange(key)}
               disabled={loading}
-              className={`h-11 px-4 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2 ${
+              className={`h-12 px-5 text-xs font-semibold uppercase tracking-wider rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2.5 ${
                 status === key
                   ? `${config.color} border`
-                  : "bg-transparent text-[var(--text-secondary)] border border-[var(--border-primary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)]"
+                  : "bg-transparent text-[var(--text-secondary)] border border-[var(--border-primary)]"
               }`}
             >
               {config.icon}
@@ -206,14 +204,14 @@ export default function AddToListButton({
       </div>
 
       {/* Rate & Review button */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => setShowRateModal(true)}
           disabled={loading}
-          className={`h-12 px-6 text-sm font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2 ${
+          className={`h-12 px-6 text-sm font-semibold uppercase tracking-wider rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2.5 ${
             hasRateOrReview
-              ? "bg-transparent border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)]"
-              : "bg-[var(--text-primary)] text-[var(--bg-primary)] border border-transparent hover:brightness-110"
+              ? "bg-transparent border border-[var(--border-primary)] text-[var(--text-secondary)]"
+              : "bg-[var(--text-primary)] text-[var(--bg-primary)] border border-transparent"
           }`}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -228,7 +226,7 @@ export default function AddToListButton({
         {review && review.trim().length > 0 && (
           <button
             onClick={() => setShowRateModal(true)}
-            className="text-xs text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors duration-150 line-clamp-1 max-w-[200px]"
+            className="text-xs text-[var(--text-tertiary)] transition-colors duration-150 line-clamp-1 max-w-[200px]"
           >
             &ldquo;{review}&rdquo;
           </button>
@@ -259,7 +257,7 @@ export default function AddToListButton({
         <button
           onClick={handleRemove}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--text-secondary)] active:text-[var(--text-primary)] disabled:opacity-40 active:scale-95"
+          className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-[var(--text-tertiary)] transition-all duration-150 active:text-[var(--text-secondary)] disabled:opacity-40 active:scale-[0.97]"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />

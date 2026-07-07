@@ -10,6 +10,7 @@ export interface MangaDexManga {
   description: string;
   coverUrl: string;
   year: number | null;
+  status: string;
   tags: string[];
 }
 
@@ -27,6 +28,7 @@ interface MangaDexResponse {
       altTitles: Record<string, string>[];
       description: Record<string, string>;
       year: number | null;
+      status: string;
       tags: Array<{
         id: string;
         attributes: {
@@ -180,6 +182,7 @@ function processMangaItem(
     description: extractDescription(item.attributes.description, lang),
     coverUrl: extractCoverUrl(item.id, item.relationships),
     year: item.attributes.year,
+    status: item.attributes.status || "",
     tags: item.attributes.tags
       .filter(
         (t) =>

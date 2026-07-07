@@ -45,12 +45,12 @@ export default function RecentReviews() {
         {reviews.map((item) => (
           <div
             key={item.id}
-            className="flex items-start gap-3 p-3 rounded-sm bg-[var(--bg-secondary)] border border-[var(--border-primary)]"
+            className="flex items-start gap-3 p-3 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)]"
           >
             {/* Manga cover thumbnail */}
             <Link
               href={`/manga/${item.manga.id}`}
-              className="shrink-0 w-10 rounded-sm overflow-hidden bg-[var(--bg-tertiary)] aspect-[3/4]"
+              className="shrink-0 w-10 rounded-lg overflow-hidden bg-[var(--bg-tertiary)] aspect-[3/4]"
             >
               {item.manga.coverUrl ? (
                 <img
@@ -71,14 +71,14 @@ export default function RecentReviews() {
               <div className="flex items-center gap-2 flex-wrap">
                 <Link
                   href={`/manga/${item.manga.id}`}
-                  className="text-xs font-light text-[var(--text-primary)] hover:underline truncate max-w-[160px]"
+                  className="text-xs font-light text-[var(--text-primary)] truncate max-w-[160px]"
                 >
                   {item.manga.title}
                 </Link>
                 <span className="text-[10px] text-[var(--text-tertiary)]">by</span>
                 <Link
                   href={`/profile/${item.user.id}`}
-                  className="text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline"
+                  className="text-[11px] text-[var(--text-secondary)]"
                 >
                   {item.user.username}
                 </Link>

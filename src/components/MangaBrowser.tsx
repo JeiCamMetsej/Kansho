@@ -10,7 +10,7 @@ import SearchFilters from "./SearchFilters";
 import UserSearchResults from "./UserSearchResults";
 import type { MangaDexManga } from "@/lib/mangadex";
 import type { SearchTab } from "./SearchBar";
-import type { ReadStatus } from "./SearchFilters";
+import type { ReadStatus, PubStatus } from "./SearchFilters";
 
 export default function MangaBrowser() {
   const searchParams = useSearchParams();
@@ -19,6 +19,7 @@ export default function MangaBrowser() {
   const tab = (searchParams.get("tab") as SearchTab) || "manga";
   const tagsParam = searchParams.get("tags") || "";
   const readStatusParam = (searchParams.get("readStatus") as ReadStatus) || "unread";
+  const pubStatusParam = (searchParams.get("status") as PubStatus) || "all";
   const { data: session } = useSession();
 
   const [manga, setManga] = useState<MangaDexManga[]>([]);
@@ -88,14 +89,25 @@ export default function MangaBrowser() {
     }
   }, [session]);
 
-  // Apply read status filter client-side
+  // Apply read status and publication status filter client-side
   const filteredManga = useMemo(() => {
-    if (readStatusParam === "all") return manga;
-    return manga.filter((m) => {
-      const inReadlist = readlistStatuses[m.id] !== undefined;
-      return readStatusParam === "read" ? inReadlist : !inReadlist;
-    });
-  }, [manga, readStatusParam, readlistStatuses]);
+    let result = manga;
+
+    // Filter by publication status
+    if (pubStatusParam !== "all") {
+      result = result.filter((m) => m.status === pubStatusParam);
+    }
+
+    // Filter by read status
+    if (readStatusParam !== "all") {
+      result = result.filter((m) => {
+        const inReadlist = readlistStatuses[m.id] !== undefined;
+        return readStatusParam === "read" ? inReadlist : !inReadlist;
+      });
+    }
+
+    return result;
+  }, [manga, readStatusParam, pubStatusParam, readlistStatuses]);
 
   const handleReadStatusChange = useCallback(
     (status: ReadStatus) => {
@@ -104,6 +116,19 @@ export default function MangaBrowser() {
         params.delete("readStatus");
       } else {
         params.set("readStatus", status);
+      }
+      router.replace(`/search?${params.toString()}`);
+    },
+    [router, searchParams]
+  );
+
+  const handleStatusChange = useCallback(
+    (status: PubStatus) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (status === "all") {
+        params.delete("status");
+      } else {
+        params.set("status", status);
       }
       router.replace(`/search?${params.toString()}`);
     },
@@ -128,6 +153,8 @@ export default function MangaBrowser() {
           <SearchFilters
             onReadStatusChange={handleReadStatusChange}
             readStatus={readStatusParam}
+            onStatusChange={handleStatusChange}
+            pubStatus={pubStatusParam}
           />
 
           {error && (
@@ -139,7 +166,7 @@ export default function MangaBrowser() {
                   setLoading(true);
                   fetchManga(0);
                 }}
-                className="mt-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline transition-all duration-150 active:brightness-75"
+                className="mt-2 text-sm text-[var(--text-secondary)] underline transition-all duration-150 active:text-[var(--text-primary)]"
               >
                 Try again
               </button>
@@ -162,9 +189,7 @@ export default function MangaBrowser() {
                 <div className="py-12 text-center">
                   <p className="text-sm text-[var(--text-tertiary)]">
                     {manga.length > 0
-                      ? readStatusParam === "read"
-                        ? "No read manga match your filters."
-                        : "No unread manga match your filters."
+                      ? "No manga match your current filters."
                       : "No manga found. Try adjusting your filters."}
                   </p>
                 </div>
@@ -172,6 +197,17 @@ export default function MangaBrowser() {
                 <MangaGrid
                   manga={filteredManga}
                   readlistStatuses={readlistStatuses}
+                  onStatusChange={(mangaId, newStatus) =>
+                    setReadlistStatuses((prev) => {
+                      const next = { ...prev };
+                      if (newStatus) {
+                        next[mangaId] = newStatus;
+                      } else {
+                        delete next[mangaId];
+                      }
+                      return next;
+                    })
+                  }
                 />
               )}
 
@@ -180,7 +216,7 @@ export default function MangaBrowser() {
                   <button
                     onClick={handleLoadMore}
                     disabled={loadingMore}
-                    className="px-8 h-12 text-sm font-semibold uppercase tracking-wider border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] transition-all duration-150 active:brightness-75 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-8 h-12 text-sm font-semibold uppercase tracking-wider border border-[var(--border-primary)] text-[var(--text-secondary)] rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {loadingMore ? "Loading..." : "Load More"}
                   </button>

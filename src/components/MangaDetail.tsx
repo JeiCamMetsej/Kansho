@@ -54,15 +54,15 @@ export default function MangaDetail({ id }: MangaDetailProps) {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+      <div className="mx-auto max-w-2xl px-4 py-6">
         <div className="animate-pulse space-y-4">
-          <div className="flex gap-6">
-            <div className="w-48 aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm shrink-0" />
-            <div className="flex-1 space-y-3">
-              <div className="h-6 bg-[var(--bg-tertiary)] rounded w-2/3" />
-              <div className="h-4 bg-[var(--bg-tertiary)] rounded w-1/3" />
-              <div className="h-3 bg-[var(--bg-tertiary)] rounded w-full" />
-              <div className="h-3 bg-[var(--bg-tertiary)] rounded w-3/4" />
+          <div className="flex flex-col gap-4">
+            <div className="w-full aspect-[3/4] max-w-[180px] bg-[var(--bg-tertiary)] rounded-xl shrink-0" />
+            <div className="space-y-3">
+              <div className="h-6 bg-[var(--bg-tertiary)] rounded-xl w-2/3" />
+              <div className="h-4 bg-[var(--bg-tertiary)] rounded-xl w-1/3" />
+              <div className="h-3 bg-[var(--bg-tertiary)] rounded-xl w-full" />
+              <div className="h-3 bg-[var(--bg-tertiary)] rounded-xl w-3/4" />
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function MangaDetail({ id }: MangaDetailProps) {
 
   if (error || !manga) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-16 text-center">
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <p className="text-sm text-[var(--text-secondary)]">
           {error || "Manga not found"}
         </p>
@@ -81,11 +81,11 @@ export default function MangaDetail({ id }: MangaDetailProps) {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
-      <div className="flex flex-col sm:flex-row gap-6">
-        {/* Cover */}
-        <div className="w-40 sm:w-48 shrink-0">
-          <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
+    <div className="mx-auto max-w-2xl px-4 py-6">
+      {/* Cover - full width on mobile */}
+      <div className="flex flex-col items-center sm:flex-row sm:items-start gap-5">
+        <div className="w-36 sm:w-48 shrink-0">
+          <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm">
             {manga.coverUrl && !imgError ? (
               <img
                 src={manga.coverUrl}
@@ -101,28 +101,46 @@ export default function MangaDetail({ id }: MangaDetailProps) {
               </div>
             )}
           </div>
-
-          </div>
+        </div>
 
         {/* Details */}
-        <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl font-light tracking-tight text-[var(--text-primary)]">
+        <div className="flex-1 min-w-0 text-center sm:text-left">
+          <h1 className="text-lg sm:text-2xl font-light tracking-tight text-[var(--text-primary)]">
             {manga.title}
           </h1>
 
-          {manga.year && (
-            <p className="mt-1 text-sm text-[var(--text-tertiary)]">
-              {manga.year}
-            </p>
+          {(manga.year || manga.status) && (
+            <div className="mt-1 flex items-center justify-center sm:justify-start gap-2 text-sm text-[var(--text-tertiary)]">
+              {manga.year && <span>{manga.year}</span>}
+              {manga.status && (
+                <>
+                  {manga.year && <span className="text-[var(--text-tertiary)]">·</span>}
+                  <span className={`inline-flex items-center gap-1 ${
+                    manga.status === "completed" ? "text-emerald-600 dark:text-emerald-400" :
+                    manga.status === "hiatus" ? "text-amber-600 dark:text-amber-400" :
+                    manga.status === "cancelled" ? "text-red-600 dark:text-red-400" :
+                    "text-sky-600 dark:text-sky-400"
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      manga.status === "completed" ? "bg-emerald-500" :
+                      manga.status === "hiatus" ? "bg-amber-500" :
+                      manga.status === "cancelled" ? "bg-red-500" :
+                      "bg-sky-500"
+                    }`} />
+                    {manga.status.charAt(0).toUpperCase() + manga.status.slice(1)}
+                  </span>
+                </>
+              )}
+            </div>
           )}
 
           {/* Tags */}
           {manga.tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-3 flex flex-wrap justify-center sm:justify-start gap-1.5">
               {manga.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] rounded-sm"
+                  className="px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] rounded-lg"
                 >
                   {tag}
                 </span>
@@ -130,10 +148,10 @@ export default function MangaDetail({ id }: MangaDetailProps) {
             </div>
           )}
 
-          {/* Status indicator for logged-in users */}
+          {/* User's current status for this manga */}
           {session && currentStatus && (
-            <div className="mt-4 space-y-1">
-              <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
+            <div className="mt-3 space-y-1">
+              <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-[var(--text-secondary)]">
                 <span className="text-[var(--text-tertiary)] uppercase tracking-wider">
                   {currentStatus.replace(/_/g, " ")}
                 </span>
@@ -142,53 +160,53 @@ export default function MangaDetail({ id }: MangaDetailProps) {
                 )}
               </div>
               {currentReview && (
-                <p className="text-[11px] text-[var(--text-tertiary)] italic leading-relaxed">
+                <p className="text-[11px] text-[var(--text-tertiary)] italic leading-relaxed text-center sm:text-left">
                   &ldquo;{currentReview}&rdquo;
                 </p>
               )}
             </div>
           )}
-
-          {/* Add to list button between title and description */}
-          {session && (
-            <div className="mt-4 mb-6 border-t border-[var(--border-primary)] pt-4">
-              <AddToListButton
-                manga={manga}
-                currentStatus={currentStatus}
-                currentRating={currentRating}
-                currentReview={currentReview}
-              />
-            </div>
-          )}
-
-          {/* Description */}
-          {manga.description && (
-            <div className="mt-6">
-              <h2 className="text-xs font-light uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
-                Description
-              </h2>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
-                {manga.description}
-              </p>
-            </div>
-          )}
-
-          {/* Not logged in prompt */}
-          {!session && (
-            <div className="mt-6 pt-4 border-t border-[var(--border-primary)]">
-              <p className="text-xs text-[var(--text-tertiary)]">
-                <a
-                  href="/login"
-                  className="text-[var(--text-primary)] underline underline-offset-2"
-                >
-                  Sign in
-                </a>{" "}
-                to add this to your reading list and rate it.
-              </p>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Action buttons */}
+      {session && (
+        <div className="mt-6 border-t border-[var(--border-primary)] pt-5">
+          <AddToListButton
+            manga={manga}
+            currentStatus={currentStatus}
+            currentRating={currentRating}
+            currentReview={currentReview}
+          />
+        </div>
+      )}
+
+      {/* Description */}
+      {manga.description && (
+        <div className="mt-6">
+          <h2 className="text-xs font-light uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+            Description
+          </h2>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+            {manga.description}
+          </p>
+        </div>
+      )}
+
+      {/* Not logged in prompt */}
+      {!session && (
+        <div className="mt-6 pt-4 border-t border-[var(--border-primary)] text-center">
+          <p className="text-xs text-[var(--text-tertiary)]">
+            <a
+              href="/login"
+              className="text-[var(--text-primary)] underline underline-offset-2"
+            >
+              Sign in
+            </a>{" "}
+            to add this to your reading list and rate it.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

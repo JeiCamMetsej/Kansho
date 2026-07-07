@@ -54,3 +54,7 @@ dev.db-journal
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+android-sdk/
+android-sdk/
+keystore.b64
+keystore.p12

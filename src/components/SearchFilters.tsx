@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { MangaDexTag } from "@/lib/mangadex";
 
 export type ReadStatus = "all" | "unread" | "read";
+export type PubStatus = "all" | "ongoing" | "completed" | "hiatus" | "cancelled";
 
 interface SearchFiltersProps {
   onReadStatusChange: (status: ReadStatus) => void;
   readStatus: ReadStatus;
+  onStatusChange: (status: PubStatus) => void;
+  pubStatus: PubStatus;
 }
 
 export default function SearchFilters({
   onReadStatusChange,
   readStatus,
+  onStatusChange,
+  pubStatus,
 }: SearchFiltersProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -25,14 +30,12 @@ export default function SearchFilters({
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  // Sync selected tags from URL on mount and external changes
   useEffect(() => {
     const tagsParam = searchParams.get("tags");
     const urlTags = tagsParam ? tagsParam.split(",").filter(Boolean) : [];
     setSelectedTags(urlTags);
   }, [searchParams]);
 
-  // Fetch tags from API
   useEffect(() => {
     fetch("/api/manga", { method: "POST" })
       .then((res) => (res.ok ? res.json() : []))
@@ -49,7 +52,6 @@ export default function SearchFilters({
       } else {
         params.delete("tags");
       }
-      // Preserve other params like q, tab
       router.replace(`/search?${params.toString()}`);
     },
     [router, searchParams]
@@ -72,11 +74,12 @@ export default function SearchFilters({
     setSelectedTags([]);
     updateUrlTags([]);
     onReadStatusChange("all");
-  }, [updateUrlTags, onReadStatusChange]);
+    onStatusChange("all");
+  }, [updateUrlTags, onReadStatusChange, onStatusChange]);
 
-  const hasActiveFilters = selectedTags.length > 0 || readStatus !== "all";
+  const hasActiveFilters = selectedTags.length > 0 || readStatus !== "all" || pubStatus !== "all";
   const activeFilterCount =
-    selectedTags.length + (readStatus !== "all" ? 1 : 0);
+    selectedTags.length + (readStatus !== "all" ? 1 : 0) + (pubStatus !== "all" ? 1 : 0);
 
   return (
     <div className="space-y-3">
@@ -84,10 +87,10 @@ export default function SearchFilters({
       <div className="flex items-center justify-between">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`h-10 inline-flex items-center gap-2 px-4 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 ${
+          className={`h-10 inline-flex items-center gap-2 px-4 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-150 active:scale-[0.97] ${
             hasActiveFilters
               ? "bg-[var(--bg-secondary)] text-[var(--text-primary)]"
-              : "bg-transparent text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-secondary)]"
+              : "bg-transparent text-[var(--text-tertiary)]"
           }`}
         >
           <svg
@@ -116,7 +119,7 @@ export default function SearchFilters({
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="h-10 px-4 text-[11px] font-semibold uppercase tracking-wider rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-secondary)] transition-all duration-150 active:scale-95"
+            className="h-10 px-4 text-[11px] font-semibold uppercase tracking-wider rounded-xl text-[var(--text-tertiary)] transition-all duration-150 active:text-[var(--text-secondary)] active:scale-[0.97]"
           >
             Clear all
           </button>
@@ -125,13 +128,43 @@ export default function SearchFilters({
 
       {/* Filter panel */}
       {showFilters && (
-        <div className="p-4 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-lg space-y-4">
+        <div className="p-4 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl space-y-5">
+          {/* Publication status */}
+          <div>
+            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2.5">
+              Publication Status
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  { value: "all", label: "All" },
+                  { value: "ongoing", label: "Ongoing" },
+                  { value: "completed", label: "Completed" },
+                  { value: "hiatus", label: "Hiatus" },
+                  { value: "cancelled", label: "Cancelled" },
+                ] as { value: PubStatus; label: string }[]
+              ).map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => onStatusChange(option.value)}
+                  className={`h-10 px-4 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-150 active:scale-[0.97] ${
+                    pubStatus === option.value
+                      ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                      : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Read status */}
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2.5">
               Read Status
             </h3>
-            <div className="flex gap-1.5">
+            <div className="flex gap-2">
               {(
                 [
                   { value: "all", label: "All" },
@@ -142,10 +175,10 @@ export default function SearchFilters({
                 <button
                   key={option.value}
                   onClick={() => onReadStatusChange(option.value)}
-                  className={`h-9 px-4 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 ${
+                  className={`h-10 px-4 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-150 active:scale-[0.97] ${
                     readStatus === option.value
                       ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
-                      : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                      : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]"
                   }`}
                 >
                   {option.label}
@@ -156,28 +189,28 @@ export default function SearchFilters({
 
           {/* Genre tags */}
           <div>
-            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
+            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)] mb-2.5">
               Genre / Theme
             </h3>
             {loadingTags ? (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-8 w-16 bg-[var(--bg-tertiary)] rounded-lg animate-pulse"
+                    className="h-10 w-16 bg-[var(--bg-tertiary)] rounded-xl animate-pulse"
                   />
                 ))}
               </div>
             ) : (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <button
                     key={tag.id}
                     onClick={() => handleTagToggle(tag.id)}
-                    className={`h-8 px-3 text-xs font-medium rounded-lg transition-all duration-150 active:scale-95 border ${
+                    className={`h-10 px-3 text-xs font-medium rounded-xl transition-all duration-150 active:scale-[0.97] border ${
                       selectedTags.includes(tag.id)
                         ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)]"
-                        : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-transparent hover:border-[var(--border-primary)]"
+                        : "bg-[var(--bg-tertiary)] text-[var(--text-secondary)] border-transparent"
                     }`}
                   >
                     {tag.name}

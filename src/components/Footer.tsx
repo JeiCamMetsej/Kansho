@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border-primary)] mt-12 pb-16 sm:pb-0">
+    <footer className="border-t border-[var(--border-primary)] mt-12 hidden sm:block">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           {/* Brand */}
@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <a
               href="mailto:jeicammetsej@gmail.com"
-              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] transition-all duration-150 active:text-[var(--text-primary)]"
               aria-label="Email jeicammetsej"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -30,7 +30,7 @@ export default function Footer() {
               href="https://discord.com/users/jeicammetsej"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] transition-all duration-150 active:text-[var(--text-primary)]"
               aria-label="Discord jeicammetsej"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -43,7 +43,7 @@ export default function Footer() {
               href="https://ko-fi.com/jeicammetsej"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+              className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)] transition-all duration-150 active:text-[var(--text-primary)]"
               aria-label="Ko-fi jeicammetsej"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">

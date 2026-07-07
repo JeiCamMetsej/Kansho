@@ -8,14 +8,13 @@ import RecentReviews from "@/components/RecentReviews";
 
 function LoadingFallback() {
   return (
-    <div className="space-y-6">
-      <div className="w-full max-w-md h-9 bg-[var(--bg-tertiary)] rounded-sm animate-pulse" />
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
+    <div className="space-y-6">          <div className="w-full max-w-md h-9 bg-[var(--bg-tertiary)] rounded-xl animate-pulse" />
+      <div className="grid grid-cols-3 gap-2.5">
         {Array.from({ length: 12 }).map((_, i) => (
           <div key={i} className="space-y-2 animate-pulse">
-            <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm" />
-            <div className="h-3 bg-[var(--bg-tertiary)] rounded w-3/4" />
-            <div className="h-2 bg-[var(--bg-tertiary)] rounded w-1/2" />
+            <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl" />
+            <div className="h-3 bg-[var(--bg-tertiary)] rounded-lg w-3/4" />
+            <div className="h-2 bg-[var(--bg-tertiary)] rounded-lg w-1/2" />
           </div>
         ))}
       </div>
@@ -47,63 +46,50 @@ function LandingHero() {
         <div className="animate-fade-up delay-300 mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/login"
-            className="inline-flex h-12 px-8 items-center justify-center text-sm font-semibold uppercase tracking-[0.12em] bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-sm transition-all duration-150 hover:brightness-110 active:brightness-75"
+            className="inline-flex h-12 px-8 items-center justify-center text-sm font-semibold uppercase tracking-[0.12em] bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-2xl transition-all duration-150 active:scale-[0.97]"
           >
             Get started
           </Link>
           <Link
             href="/search"
-            className="inline-flex h-12 px-8 items-center justify-center text-sm font-medium uppercase tracking-[0.12em] text-[var(--text-secondary)] border border-[var(--border-primary)] rounded-sm transition-all duration-150 hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)] active:brightness-75"
+            className="inline-flex h-12 px-8 items-center justify-center text-sm font-medium uppercase tracking-[0.12em] text-[var(--text-secondary)] border border-[var(--border-primary)] rounded-2xl transition-all duration-150 active:scale-[0.97]"
           >
             Browse manga
           </Link>
         </div>
 
         {/* Feature hints */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
-          <div className="animate-fade-up delay-400 group cursor-default">
-            <div className="rounded-sm p-6 transition-all duration-300 group-hover:bg-[var(--bg-tertiary)] group-hover:-translate-y-1">
-              <div className="mx-auto h-8 w-8 flex items-center justify-center text-[var(--text-secondary)] transition-all duration-300 group-hover:text-[var(--text-primary)] group-hover:scale-110">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <div className="mt-12 max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-xl p-4 bg-[var(--bg-secondary)]/50">
+              <div className="mx-auto h-6 w-6 flex items-center justify-center text-[var(--text-secondary)]">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" />
                 </svg>
               </div>
-              <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-primary)]">
+              <h3 className="mt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--text-primary)]">
                 Discover
               </h3>
-              <p className="mt-1 text-xs text-[var(--text-tertiary)] leading-relaxed group-hover:text-[var(--text-secondary)] transition-colors duration-300">
-                Explore trending and hidden gem series
-              </p>
             </div>
-          </div>
-          <div className="animate-fade-up delay-500 group cursor-default">
-            <div className="rounded-sm p-6 transition-all duration-300 group-hover:bg-[var(--bg-tertiary)] group-hover:-translate-y-1">
-              <div className="mx-auto h-8 w-8 flex items-center justify-center text-[var(--text-secondary)] transition-all duration-300 group-hover:text-[var(--text-primary)] group-hover:scale-110">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="rounded-xl p-4 bg-[var(--bg-secondary)]/50">
+              <div className="mx-auto h-6 w-6 flex items-center justify-center text-[var(--text-secondary)]">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 12h6" /><path d="M12 9v6" /><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z" />
                 </svg>
               </div>
-              <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-primary)]">
+              <h3 className="mt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--text-primary)]">
                 Track
               </h3>
-              <p className="mt-1 text-xs text-[var(--text-tertiary)] leading-relaxed group-hover:text-[var(--text-secondary)] transition-colors duration-300">
-                Build and manage your personal reading list
-              </p>
             </div>
-          </div>
-          <div className="animate-fade-up delay-600 group cursor-default">
-            <div className="rounded-sm p-6 transition-all duration-300 group-hover:bg-[var(--bg-tertiary)] group-hover:-translate-y-1">
-              <div className="mx-auto h-8 w-8 flex items-center justify-center text-[var(--text-secondary)] transition-all duration-300 group-hover:text-[var(--text-primary)] group-hover:scale-110">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="rounded-xl p-4 bg-[var(--bg-secondary)]/50">
+              <div className="mx-auto h-6 w-6 flex items-center justify-center text-[var(--text-secondary)]">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3l-4 4z" />
                 </svg>
               </div>
-              <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-primary)]">
+              <h3 className="mt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--text-primary)]">
                 Share
               </h3>
-              <p className="mt-1 text-xs text-[var(--text-tertiary)] leading-relaxed group-hover:text-[var(--text-secondary)] transition-colors duration-300">
-                Rate and review what you&apos;ve read
-              </p>
             </div>
           </div>
         </div>
@@ -122,7 +108,7 @@ export default function Home() {
 
   // Authenticated — show dashboard
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div className="mx-auto max-w-7xl px-4 py-6">
       <Suspense fallback={null}>
         <RecentReviews />
       </Suspense>

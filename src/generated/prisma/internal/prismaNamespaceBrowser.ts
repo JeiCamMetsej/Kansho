@@ -91,6 +91,7 @@ export const MangaScalarFieldEnum = {
   description: 'description',
   coverUrl: 'coverUrl',
   year: 'year',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

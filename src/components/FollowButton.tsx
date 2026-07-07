@@ -56,10 +56,10 @@ export default function FollowButton({
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`h-11 px-6 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-150 active:scale-95 disabled:opacity-50 inline-flex items-center gap-2 ${
+      className={`h-12 px-6 text-xs font-semibold uppercase tracking-wider rounded-2xl transition-all duration-150 active:scale-[0.97] disabled:opacity-50 inline-flex items-center gap-2.5 ${
         following
-          ? "bg-transparent border border-[var(--border-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-tertiary)]"
-          : "bg-[var(--text-primary)] text-[var(--bg-primary)] border border-transparent hover:brightness-110"
+          ? "bg-transparent border border-[var(--border-primary)] text-[var(--text-secondary)]"
+          : "bg-[var(--text-primary)] text-[var(--bg-primary)] border border-transparent"
       }`}
     >
       {loading ? (

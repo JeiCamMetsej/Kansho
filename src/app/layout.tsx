@@ -69,7 +69,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)]" suppressHydrationWarning>
         <Providers>
           <Header />
-          <main className="flex-1 pb-16 sm:pb-0">{children}</main>
+          <main className="flex-1 pb-safe">{children}</main>
           <Footer />
           <BottomNav />
         </Providers>

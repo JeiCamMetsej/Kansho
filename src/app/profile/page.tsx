@@ -71,13 +71,13 @@ export default function ProfilePage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-[var(--bg-tertiary)] rounded w-1/3" />
-          <div className="h-4 bg-[var(--bg-tertiary)] rounded w-1/4" />
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+          <div className="h-6 bg-[var(--bg-tertiary)] rounded-xl w-1/3" />
+          <div className="h-4 bg-[var(--bg-tertiary)] rounded-xl w-1/4" />
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm" />
+              <div key={i} className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl" />
             ))}
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
   if (!profile) {
     return (
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-16 text-center">
+      <div className="mx-auto max-w-4xl px-4 py-16 text-center">
         <p className="text-sm text-[var(--text-secondary)]">Profile not found</p>
       </div>
     );
@@ -106,15 +106,15 @@ export default function ProfilePage() {
       : profile.readList.filter((item) => item.status === activeTab);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+    <div className="mx-auto max-w-4xl px-4 py-6">
       {/* Profile Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-light tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-lg font-light tracking-tight text-[var(--text-primary)]">
               {profile.username}
             </h1>
-            <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+            <p className="mt-0.5 text-xs text-[var(--text-tertiary)]">
               Joined {new Date(profile.createdAt).toLocaleDateString()}
             </p>
           </div>
@@ -137,7 +137,7 @@ export default function ProfilePage() {
           </span>
           <button
             onClick={() => setShowFollowing(!showFollowing)}
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+            className="text-xs text-[var(--text-secondary)] transition-all duration-150 active:text-[var(--text-primary)]"
           >
             <strong className="text-[var(--text-primary)] font-medium">
               {following.length}
@@ -146,7 +146,7 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setShowFollowers(!showFollowers)}
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-150 active:brightness-75"
+            className="text-xs text-[var(--text-secondary)] transition-all duration-150 active:text-[var(--text-primary)]"
           >
             <strong className="text-[var(--text-primary)] font-medium">
               {followers.length}
@@ -159,7 +159,7 @@ export default function ProfilePage() {
           href="https://ko-fi.com/jeicammetsej"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 h-10 px-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider rounded-sm bg-[var(--text-primary)] text-[var(--bg-primary)] hover:brightness-110 transition-all duration-150 active:brightness-75"
+          className="mt-4 h-10 px-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider rounded-xl bg-[var(--text-primary)] text-[var(--bg-primary)] transition-all duration-150 active:scale-[0.97]"
           aria-label="Support Kanshō on Ko-fi"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -170,7 +170,7 @@ export default function ProfilePage() {
 
         {/* Following list */}
         {showFollowing && (
-          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm">
+          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl">
             <h3 className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
               Following
             </h3>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
                   <Link
                     key={user.id}
                     href={`/profile/${user.id}`}
-                    className="block text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150"
+                    className="block text-[11px] text-[var(--text-secondary)] transition-colors duration-150 active:text-[var(--text-primary)]"
                   >
                     {user.username}
                   </Link>
@@ -194,7 +194,7 @@ export default function ProfilePage() {
 
         {/* Followers list */}
         {showFollowers && (
-          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-sm">
+          <div className="mt-3 p-3 bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-2xl">
             <h3 className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-tertiary)] mb-2">
               Followers
             </h3>
@@ -206,7 +206,7 @@ export default function ProfilePage() {
                   <Link
                     key={user.id}
                     href={`/profile/${user.id}`}
-                    className="block text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150"
+                    className="block text-[11px] text-[var(--text-secondary)] transition-colors duration-150 active:text-[var(--text-primary)]"
                   >
                     {user.username}
                   </Link>
@@ -218,16 +218,16 @@ export default function ProfilePage() {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-[var(--border-primary)] mb-6">
+      <div className="border-b border-[var(--border-primary)] mb-5">
         <div className="grid grid-cols-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-1.5 text-[11px] text-center uppercase tracking-wider transition-all duration-150 active:brightness-75 ${
+              className={`pb-2 text-[11px] text-center uppercase tracking-wider transition-all duration-150 active:scale-[0.97] ${
                 activeTab === tab.id
                   ? "text-[var(--text-primary)] border-b-2 border-[var(--text-primary)]"
-                  : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] border-b-2 border-transparent"
+                  : "text-[var(--text-tertiary)] border-b-2 border-transparent"
               }`}
             >
               {tab.label}
@@ -246,26 +246,26 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/"
-            className="inline-block mt-3 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline underline-offset-2"
+            className="inline-block mt-3 text-xs text-[var(--text-secondary)] underline underline-offset-2 transition-all duration-150 active:text-[var(--text-primary)]"
           >
             Browse manga
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-3 gap-y-6">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
           {filtered.map((item) => (
             <Link
               key={item.id}
               href={`/manga/${item.mangaId}`}
-              className="group block"
+              className="active:scale-[0.97] transition-transform duration-150"
             >
-              <article className="space-y-2">
-                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-sm overflow-hidden">
+              <article className="space-y-1.5">
+                <div className="aspect-[3/4] bg-[var(--bg-tertiary)] rounded-xl overflow-hidden shadow-sm">
                   {item.manga.coverUrl ? (
                     <img
                       src={item.manga.coverUrl}
                       alt={item.manga.title}
-                      className="w-full h-full object-cover transition-opacity group-hover:opacity-80"
+                      className="w-full h-full object-cover"
                       loading="lazy"
                     />
                   ) : (
@@ -276,8 +276,8 @@ export default function ProfilePage() {
                     </div>
                   )}
                 </div>
-                <div className="space-y-0.5">
-                  <h3 className="text-xs font-light text-[var(--text-primary)] leading-tight line-clamp-2">
+                <div className="space-y-0.5 px-0.5">
+                  <h3 className="text-[11px] font-light text-[var(--text-primary)] leading-tight line-clamp-2">
                     {item.manga.title}
                   </h3>
                   <div className="flex flex-col gap-0.5">

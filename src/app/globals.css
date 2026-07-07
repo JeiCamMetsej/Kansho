@@ -178,12 +178,31 @@ body {
   }
 }
 
+@keyframes icon-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-15deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.25, 1) both;
 }
 
 .animate-fade-in {
   animation: fade-in 0.7s cubic-bezier(0.16, 1, 0.25, 1) both;
+}
+
+.animate-icon-pop {
+  animation: icon-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* Staggered delay helpers */
@@ -209,10 +228,26 @@ body {
   animation-delay: 700ms;
 }
 
+/* ── Mobile-friendly tap targets ── */
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding for modern mobile devices */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
-  .animate-fade-in {
+  .animate-fade-in,
+  .animate-icon-pop {
     animation: none;
   }
 }

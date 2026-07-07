@@ -6,9 +6,10 @@ import type { MangaDexManga } from "@/lib/mangadex";
 interface MangaGridProps {
   manga: MangaDexManga[];
   readlistStatuses?: Record<string, string>;
+  onStatusChange?: (mangaId: string, newStatus: string | null) => void;
 }
 
-export default function MangaGrid({ manga, readlistStatuses }: MangaGridProps) {
+export default function MangaGrid({ manga, readlistStatuses, onStatusChange }: MangaGridProps) {
   if (manga.length === 0) {
     return (
       <div className="py-16 text-center">
@@ -20,12 +21,13 @@ export default function MangaGrid({ manga, readlistStatuses }: MangaGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-3 gap-y-6">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
       {manga.map((item) => (
         <MangaCard
           key={item.id}
           manga={item}
           readlistStatus={readlistStatuses?.[item.id] ?? null}
+          onStatusChange={onStatusChange}
         />
       ))}
     </div>
