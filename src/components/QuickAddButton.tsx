@@ -159,7 +159,7 @@ export default function QuickAddButton({
       className={`${btnSize} rounded-full flex items-center justify-center text-white shadow-md backdrop-blur-sm transition-all duration-200 ease-out active:scale-75 disabled:opacity-60 ${
         isActive && config
           ? config.bg
-          : "bg-white/80 text-[var(--text-secondary)]"
+          : "bg-[var(--bg-primary)]/80 backdrop-blur-sm text-[var(--text-primary)]"
       }`}
       title={
         displayStatus
